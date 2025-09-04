@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { authOptions } from "../lib/auth";
+// import { authOptions } from "../lib/auth";
 
 export default async function Home() {
 
