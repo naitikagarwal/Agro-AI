@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function GET() {
-  return NextResponse.redirect(new URL("/signup", process.env.NEXTAUTH_URL));
+  return NextResponse.redirect(new URL("/api/auth/signup", process.env.NEXTAUTH_URL));
 }
 
 export async function POST(request: Request) {
