@@ -26,6 +26,19 @@ export async function getUser() {
         fullName: true,
         username: true,
         email: true,
+        Fields: {
+          select: {
+            id: true,
+            name: true,
+            location: true,
+            // The nested relation names below are guesses based on your earlier messages.
+            // If your schema uses `daywise_data`, `daywise_result`, `final_result` or
+            // camelCased names, replace these accordingly.
+            daywiseData: true,     // e.g. images, soilMoisture, soilTemperature, etc.
+            daywiseResults: true,   // per-day computed results
+            finalResults: true,     // aggregated / final results
+          },
+        },
         // Don't select password for security
       },
     });

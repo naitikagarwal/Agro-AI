@@ -1,10 +1,10 @@
-
-
-// dashboard/page.tsx (Client Component)
 "use client";
 
 import { getUser } from "@/lib/action/getUser";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 interface User {
   id: string;
@@ -13,16 +13,18 @@ interface User {
   email: string;
 }
 
+
 export default function Dashboard() {
-    
+
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
- 
+
   useEffect(() => {
     async function fetchUser() {
       const res = await getUser();
       setUserData(res.user);
+      console.log(res.user);
       setLoading(false);
     }
     fetchUser();
@@ -40,32 +42,34 @@ export default function Dashboard() {
   }
 
   if (!userData) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-600">No user found. Please log in.</p>
-      </div>
-    );
+    redirect("/api/auth/signin");
   }
 
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Welcome back, {userData.fullName}!
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Good to see you again, @{userData.username}
-        </p>
-      </div>
-      
-      {/* Rest of your dashboard content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Dashboard Stats</h2>
-          {/* Your content */}
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarTrigger />
+      <div className="p-6">
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Welcome back, {userData.id}!
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Good to see you again, @{userData.username}
+            </p>
+            
+          </div>
+        </div>
+
+        {/* Rest of dashboard */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-xl font-semibold mb-4">Dashboard Stats</h2>
+          </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
