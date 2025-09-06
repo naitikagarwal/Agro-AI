@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-// Replace these imports with your actual Sidebar components or keep using your own primitives
 import {
   Sidebar,
   SidebarContent,
@@ -20,7 +19,6 @@ import FieldModal from "./FieldModal";
 import { Button } from "./ui/button";
 
 type DaywiseItem = {
-  // adjust fields to match your schema
   id: number;
   date?: string;
 };
@@ -29,19 +27,17 @@ type Field = {
   id: number;
   name: string;
   location?: string;
-  daywiseData?: DaywiseItem[]; // if empty or undefined -> no days
+  daywiseData?: DaywiseItem[];
   daywiseResults?: any[];
   finalResults?: any[];
 };
 
 type Props = {
   fields: Field[];
-  // optional: baseUrl pattern for day links, you can pass it or change below
   dayLink?: (fieldId: number, dayIndex: number) => string;
 };
 
 export function AppSidebarClient({ fields, dayLink }: Props) {
-  // single hook at top-level: safe
   const [openFieldIds, setOpenFieldIds] = useState<number[]>([]);
 
   const toggleField = (id: number) => {
@@ -71,17 +67,39 @@ export function AppSidebarClient({ fields, dayLink }: Props) {
         </SidebarMenu>
         <FieldModal />
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Static Menu Items */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/dashboard">Dashboard</Link>
+                  <Link href="/overview">Overview</Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              {/* Dynamically render fields */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/report">Report</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/profile">Profile</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/upload">Upload</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              {/* Fields Section */}
+              <SidebarGroupLabel className="mt-4">Fields</SidebarGroupLabel>
+
               {fields && fields.length > 0 ? (
                 fields.map((field) => {
                   const days = field.daywiseData ?? [];
@@ -107,7 +125,6 @@ export function AppSidebarClient({ fields, dayLink }: Props) {
                         </button>
                       </SidebarMenuItem>
 
-                      {/* Collapsible day list */}
                       {isOpen && (
                         <div
                           id={`field-days-${field.id}`}
@@ -152,10 +169,11 @@ export function AppSidebarClient({ fields, dayLink }: Props) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>Profile</SidebarMenu>
 
-        <Button variant={"destructive"}>Logout</Button>
+      <SidebarFooter>
+        <Button variant={"destructive"} className="w-full">
+          Logout
+        </Button>
       </SidebarFooter>
     </Sidebar>
   );
