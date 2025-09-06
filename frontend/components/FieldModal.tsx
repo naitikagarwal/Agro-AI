@@ -116,7 +116,7 @@ export default function FieldModal() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg cursor-pointer shadow-md">
-          + Add Field
+          + Add New Field
         </Button>
       </DialogTrigger>
 

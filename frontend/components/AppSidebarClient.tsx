@@ -13,9 +13,11 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import FieldModal from "./FieldModal";
+import { Button } from "./ui/button";
 
 type DaywiseItem = {
   // adjust fields to match your schema
@@ -53,14 +55,24 @@ export function AppSidebarClient({ fields, dayLink }: Props) {
 
   return (
     <Sidebar>
+      <SidebarHeader className="px-3 py-3">
+        <SidebarMenu className="text-lg font-semibold tracking-wide text-slate-900 dark:text-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
+              AI
+            </div>
+            <div>
+              <h1 className="text-lg font-semibold">AgroAI</h1>
+              <p className="text-xs text-slate-500 -mt-0.5">
+                Precision crop intelligence
+              </p>
+            </div>
+          </div>
+        </SidebarMenu>
+        <FieldModal />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>AGRO AI</SidebarGroupLabel>
-
-          <SidebarHeader>
-            <FieldModal />
-          </SidebarHeader>
-
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -140,6 +152,11 @@ export function AppSidebarClient({ fields, dayLink }: Props) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>Profile</SidebarMenu>
+
+        <Button variant={"destructive"}>Logout</Button>
+      </SidebarFooter>
     </Sidebar>
   );
 }

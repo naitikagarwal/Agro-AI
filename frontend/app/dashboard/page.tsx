@@ -3,8 +3,11 @@
 import { getUser } from "@/lib/action/getUser";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import DashboardHome from "@/components/dashboard-home";
 import { AppSidebarClient } from "@/components/AppSidebarClient";
 
@@ -31,11 +34,19 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/6"></div>
+      <div className="flex h-screen w-full items-center justify-center bg-gray-50">
+        <div className="w-64 h-1 bg-gray-200 overflow-hidden relative rounded">
+          <div className="absolute left-0 top-0 h-full w-1/3 bg-emerald-500 animate-[slide_1.5s_linear_infinite]"></div>
         </div>
+        <style>
+          {`
+      @keyframes slide {
+        0% { left: -33%; }
+        50% { left: 50%; }
+        100% { left: 100%; }
+      }
+    `}
+        </style>
       </div>
     );
   }
@@ -47,31 +58,16 @@ export default function Dashboard() {
   const fields = userData?.Fields ?? [];
 
   return (
-    <SidebarProvider>
-      <AppSidebarClient fields={fields} />
+    <div className="!bg-white">
+      <SidebarProvider>
+        <AppSidebarClient fields={fields} />
 
-      <SidebarTrigger />
-      <div className="p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              {/* Welcome back, {userData.id}! */}
-            </h1>
-            <p className="text-gray-600 mt-2">
-              {/* Good to see you again, @{userData.username} */}
-            </p>
-          </div>
-        </div>
+        <SidebarInset className="flex flex-col">
+          <SidebarTrigger className="cursor-pointer" />
 
-        {/* Rest of dashboard */}
-        <div className="">
           <DashboardHome></DashboardHome>
-          {/* <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Dashboard Stats</h2>
-            
-          </div> */}
-        </div>
-      </div>
-    </SidebarProvider>
+        </SidebarInset>
+      </SidebarProvider>
+    </div>
   );
 }
