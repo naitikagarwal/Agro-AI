@@ -208,10 +208,6 @@ function RiskMapGrid({ matrix }: { matrix: number[][] }) {
   );
 }
 
-/* -------------------------
-   Page UI
-   ------------------------- */
-
 export default function ReportPage() {
   const cnn = sampleCNN;
   const lstm = sampleLSTM;
