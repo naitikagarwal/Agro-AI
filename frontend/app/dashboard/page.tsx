@@ -52,7 +52,7 @@ export default function Dashboard() {
   }
 
   if (!userData) {
-    // redirect("/api/auth/signin");
+    redirect("/api/auth/signin");
   }
 
   const fields = userData?.Fields ?? [];

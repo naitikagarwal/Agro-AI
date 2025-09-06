@@ -2,6 +2,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 // Landing page component for the AI-powered agriculture platform
 // Built with Tailwind + shadcn components. Drop this file into a React/Vite app.
@@ -31,10 +33,13 @@ export default function Home() {
             How it works
           </a>
           <a className="text-sm text-slate-600 hover:text-slate-900">Pricing</a>
-          <Button variant="ghost" size="sm">
+          <Link href="api/auth/signin">
+          <Button variant="ghost" size="sm" >
             Sign in
-          </Button>
+          </Button></Link>
+          <Link href="/signup">
           <Button size="sm">Sign up</Button>
+          </Link>
         </nav>
       </header>
 

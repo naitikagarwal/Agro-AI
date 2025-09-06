@@ -158,7 +158,7 @@ export default function SignUp() {
               </button>
 
               {/* Sign In Button */}
-              <Link href="/signin">
+              <Link href="api/auth/signin">
                 <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-secondary text-secondary-foreground text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background">
                   <span className="truncate">Sign In</span>
                 </button>
@@ -396,7 +396,7 @@ export default function SignUp() {
                 <p className="mt-6 text-center text-sm text-muted-foreground">
                   Already have an account?{" "}
                   <Link
-                    href="/login"
+                    href="/api/auth/signin"
                     className="font-medium text-[#f9f506] hover:text-[#e6e005] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background rounded-sm"
                   >
                     Sign in here
