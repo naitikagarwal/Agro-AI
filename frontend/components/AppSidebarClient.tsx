@@ -44,7 +44,7 @@ export function AppSidebarClient({ fields, dayLink }: Props) {
 
   const toggleField = (id: number) => {
     setOpenFieldIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -106,12 +106,15 @@ export function AppSidebarClient({ fields, dayLink }: Props) {
                               const dayIndex = idx + 1;
                               const href = (dayLink ?? defaultDayLink)(
                                 field.id,
-                                dayIndex
+                                dayIndex,
                               );
                               return (
                                 <SidebarMenuItem key={dayIndex}>
                                   <SidebarMenuButton asChild>
-                                    <a href={href} className="block px-3 py-1 rounded hover:bg-gray-100 text-sm">
+                                    <a
+                                      href={href}
+                                      className="block px-3 py-1 rounded hover:bg-gray-100 text-sm"
+                                    >
                                       Day {dayIndex}
                                     </a>
                                   </SidebarMenuButton>

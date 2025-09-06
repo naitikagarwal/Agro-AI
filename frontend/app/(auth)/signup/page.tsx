@@ -22,14 +22,16 @@ export default function SignUp() {
 
   // Check for saved theme preference on component mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
       setDarkMode(true);
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
@@ -37,12 +39,12 @@ export default function SignUp() {
   const toggleTheme = () => {
     const newTheme = !darkMode;
     setDarkMode(newTheme);
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-    
+    localStorage.setItem("theme", newTheme ? "dark" : "light");
+
     if (newTheme) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   };
 
@@ -128,7 +130,11 @@ export default function SignUp() {
           <header className="flex items-center justify-between whitespace-nowrap border-b border-border px-10 py-3">
             <div className="flex items-center gap-4 text-foreground">
               <div className="size-6 text-[#f9f506]">
-                <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 48 48"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" />
                 </svg>
               </div>
@@ -136,7 +142,7 @@ export default function SignUp() {
                 AgriView
               </h2>
             </div>
-            
+
             <div className="flex items-center gap-4">
               {/* Theme Toggle Button */}
               <button
@@ -150,14 +156,14 @@ export default function SignUp() {
                   <Moon className="h-5 w-5" />
                 )}
               </button>
-              
+
               {/* Sign In Button */}
               <Link href="/signin">
                 <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-secondary text-secondary-foreground text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background">
                   <span className="truncate">Sign In</span>
                 </button>
               </Link>
-              
+
               {/* Sign Up Button - Active */}
               <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-[#e6e005] focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background">
                 <span className="truncate">Sign Up</span>
@@ -173,7 +179,8 @@ export default function SignUp() {
                   Create your account
                 </h2>
                 <p className="mt-2 text-center text-sm text-muted-foreground">
-                  Join AgriView to start monitoring your crops with AI-powered insights.
+                  Join AgriView to start monitoring your crops with AI-powered
+                  insights.
                 </p>
               </div>
 
@@ -182,7 +189,10 @@ export default function SignUp() {
                 <div className="space-y-5">
                   {/* Full Name Field */}
                   <div className="space-y-2">
-                    <label htmlFor="fullName" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="fullName"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Full Name
                     </label>
                     <div className="relative">
@@ -196,18 +206,25 @@ export default function SignUp() {
                         onChange={handleInputChange}
                         required
                         className={`flex h-12 w-full rounded-lg border bg-card px-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.fullName ? "border-destructive" : "border-input"
+                          errors.fullName
+                            ? "border-destructive"
+                            : "border-input"
                         }`}
                       />
                     </div>
                     {errors.fullName && (
-                      <p className="text-destructive text-xs">{errors.fullName}</p>
+                      <p className="text-destructive text-xs">
+                        {errors.fullName}
+                      </p>
                     )}
                   </div>
 
                   {/* Username Field */}
                   <div className="space-y-2">
-                    <label htmlFor="username" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="username"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Username
                     </label>
                     <div className="relative">
@@ -221,18 +238,25 @@ export default function SignUp() {
                         onChange={handleInputChange}
                         required
                         className={`flex h-12 w-full rounded-lg border bg-card px-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.username ? "border-destructive" : "border-input"
+                          errors.username
+                            ? "border-destructive"
+                            : "border-input"
                         }`}
                       />
                     </div>
                     {errors.username && (
-                      <p className="text-destructive text-xs">{errors.username}</p>
+                      <p className="text-destructive text-xs">
+                        {errors.username}
+                      </p>
                     )}
                   </div>
 
                   {/* Email Field */}
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Email Address
                     </label>
                     <div className="relative">
@@ -257,7 +281,10 @@ export default function SignUp() {
 
                   {/* Password Field */}
                   <div className="space-y-2">
-                    <label htmlFor="password" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="password"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Password
                     </label>
                     <div className="relative">
@@ -271,7 +298,9 @@ export default function SignUp() {
                         onChange={handleInputChange}
                         required
                         className={`flex h-12 w-full rounded-lg border bg-card px-10 pr-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.password ? "border-destructive" : "border-input"
+                          errors.password
+                            ? "border-destructive"
+                            : "border-input"
                         }`}
                       />
                       <button
@@ -279,17 +308,26 @@ export default function SignUp() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="text-destructive text-xs">{errors.password}</p>
+                      <p className="text-destructive text-xs">
+                        {errors.password}
+                      </p>
                     )}
                   </div>
 
                   {/* Confirm Password Field */}
                   <div className="space-y-2">
-                    <label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="confirmPassword"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Confirm Password
                     </label>
                     <div className="relative">
@@ -303,19 +341,29 @@ export default function SignUp() {
                         onChange={handleInputChange}
                         required
                         className={`flex h-12 w-full rounded-lg border bg-card px-10 pr-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.confirmPassword ? "border-destructive" : "border-input"
+                          errors.confirmPassword
+                            ? "border-destructive"
+                            : "border-input"
                         }`}
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                     {errors.confirmPassword && (
-                      <p className="text-destructive text-xs">{errors.confirmPassword}</p>
+                      <p className="text-destructive text-xs">
+                        {errors.confirmPassword}
+                      </p>
                     )}
                   </div>
 
@@ -346,7 +394,7 @@ export default function SignUp() {
                 </div>
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">
-                  Already have an account?{' '}
+                  Already have an account?{" "}
                   <Link
                     href="/login"
                     className="font-medium text-[#f9f506] hover:text-[#e6e005] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background rounded-sm"

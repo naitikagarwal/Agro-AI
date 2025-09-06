@@ -10,7 +10,8 @@
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
     "db:generate": "npx prisma generate",
-    "db:reset": "prisma migrate reset && prisma migrate dev"
+    "db:reset": "prisma migrate reset && prisma migrate dev",
+    "format": "prettier --write ."
   },
   "prisma": {
     "schema": "lib/db/schema.prisma"

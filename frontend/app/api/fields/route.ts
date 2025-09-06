@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     if (!userId || !name) {
       return NextResponse.json(
         { error: "userId and name are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     console.error("Error creating field:", error);
     return NextResponse.json(
       { error: "Failed to create field" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -44,7 +44,7 @@ export async function GET(req: Request) {
     if (!userId) {
       return NextResponse.json(
         { error: "userId is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -62,7 +62,7 @@ export async function GET(req: Request) {
     console.error("Error fetching fields:", error);
     return NextResponse.json(
       { error: "Failed to fetch fields" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

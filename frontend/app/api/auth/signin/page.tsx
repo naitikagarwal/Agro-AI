@@ -54,15 +54,11 @@ export default function SignIn() {
       <div className="absolute inset-0 opacity-5"></div>
 
       <div className="w-full max-w-md relative z-10">
-
-
         {/* Sign In Box */}
         <div className="backdrop-blur-sm bg-black/80 border-0 shadow-2xl rounded-2xl p-6">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-semibold">Sign In</h2>
-            <p className="">
-              Enter your credentials to access your account
-            </p>
+            <p className="">Enter your credentials to access your account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -145,16 +141,12 @@ export default function SignIn() {
           <div className="mt-6 text-center">
             <p className="">
               Don't have an account?{" "}
-              <Link
-                href="/signup"
-                className=""
-              >
+              <Link href="/signup" className="">
                 Sign up here
               </Link>
             </p>
           </div>
         </div>
-
       </div>
     </div>
   );

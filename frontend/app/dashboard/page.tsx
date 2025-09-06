@@ -3,11 +3,10 @@
 import { getUser } from "@/lib/action/getUser";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import DashboardHome from "@/components/dashboard-home"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import DashboardHome from "@/components/dashboard-home";
 import { AppSidebarClient } from "@/components/AppSidebarClient";
-
 
 interface User {
   id: string;
@@ -16,12 +15,9 @@ interface User {
   email: string;
 }
 
-
 export default function Dashboard() {
-
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     async function fetchUser() {
@@ -64,13 +60,12 @@ export default function Dashboard() {
             <p className="text-gray-600 mt-2">
               {/* Good to see you again, @{userData.username} */}
             </p>
-            
           </div>
         </div>
 
         {/* Rest of dashboard */}
         <div className="">
-            <DashboardHome></DashboardHome>
+          <DashboardHome></DashboardHome>
           {/* <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Dashboard Stats</h2>
             

@@ -10,7 +10,8 @@ export const authOptions = {
       name: "Credentials",
       credentials: {
         username: {
-          label: "Username", type: "text",
+          label: "Username",
+          type: "text",
         },
         password: { label: "Password", type: "password" },
       },
@@ -23,7 +24,7 @@ export const authOptions = {
         try {
           console.log(
             "Searching for user with username:",
-            credentials.username
+            credentials.username,
           );
 
           const user = await prisma.user.findUnique({
@@ -40,7 +41,7 @@ export const authOptions = {
           console.log("User found, verifying password");
           const passwordMatch = await bcrypt.compare(
             credentials.password,
-            user.password
+            user.password,
           );
 
           if (!passwordMatch) {

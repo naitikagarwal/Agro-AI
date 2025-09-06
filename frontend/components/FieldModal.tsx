@@ -2,7 +2,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,9 +38,11 @@ export default function FieldModal() {
     description: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,8 +58,6 @@ export default function FieldModal() {
     if (res.ok) {
       toast.success(`Field created successfully 🌱`);
       setFormData({ name: "", location: "", description: "" });
-
-
     } else {
       console.error("Error creating field");
     }
@@ -78,7 +85,7 @@ export default function FieldModal() {
         try {
           // reverse geocode for city name
           const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
           );
           const data = await res.json();
           const city =
@@ -101,12 +108,9 @@ export default function FieldModal() {
       (error) => {
         console.error(error);
         setLoadig(false);
-      }
+      },
     );
   };
-
-
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -153,7 +157,9 @@ export default function FieldModal() {
                 placeholder="e.g. Bangalore"
                 className="rounded-sm"
               />
-              <p className="text-xs text-muted-foreground mt-1">You can enter a city or click Get Location to auto-fill.</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                You can enter a city or click Get Location to auto-fill.
+              </p>
             </div>
 
             <div className="flex sm:items-end items-center">
@@ -167,18 +173,50 @@ export default function FieldModal() {
                 {loadig ? (
                   <>
                     {/* spinner */}
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
                     </svg>
                     <span className="text-sm">Getting...</span>
                   </>
                 ) : (
                   <>
                     {/* location icon */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 11.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M19.5 10.5C19.5 16 12 21 12 21s-7.5-5-7.5-10.5A7.5 7.5 0 0112 3a7.5 7.5 0 017.5 7.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 11.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M19.5 10.5C19.5 16 12 21 12 21s-7.5-5-7.5-10.5A7.5 7.5 0 0112 3a7.5 7.5 0 017.5 7.5z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                     <span className="text-sm">Get Location</span>
                   </>
@@ -188,7 +226,9 @@ export default function FieldModal() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2">
+              Description
+            </label>
             <Textarea
               name="description"
               value={formData.description}
@@ -221,9 +261,24 @@ export default function FieldModal() {
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
                     </svg>
                     <span>Saving...</span>
                   </>

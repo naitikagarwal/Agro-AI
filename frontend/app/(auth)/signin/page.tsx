@@ -19,14 +19,16 @@ export default function SignIn() {
 
   // Check for saved theme preference on component mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
       setDarkMode(true);
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
@@ -34,19 +36,19 @@ export default function SignIn() {
   const toggleTheme = () => {
     const newTheme = !darkMode;
     setDarkMode(newTheme);
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-    
+    localStorage.setItem("theme", newTheme ? "dark" : "light");
+
     if (newTheme) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.email.includes('@')) {
+    if (!formData.email.includes("@")) {
       newErrors.email = "Please enter a valid email address";
     }
 
@@ -96,7 +98,7 @@ export default function SignIn() {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
 
     // Clear error when user starts typing
@@ -116,7 +118,11 @@ export default function SignIn() {
           <header className="flex items-center justify-between whitespace-nowrap border-b border-border px-10 py-3">
             <div className="flex items-center gap-4 text-foreground">
               <div className="size-6 text-[#f9f506]">
-                <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 48 48"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" />
                 </svg>
               </div>
@@ -124,7 +130,7 @@ export default function SignIn() {
                 AgriView
               </h2>
             </div>
-            
+
             <div className="flex items-center gap-4">
               {/* Theme Toggle Button */}
               <button
@@ -138,12 +144,12 @@ export default function SignIn() {
                   <Moon className="h-5 w-5" />
                 )}
               </button>
-              
+
               {/* Sign In Button - Active */}
               <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-[#e6e005] focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background">
                 <span className="truncate">Sign In</span>
               </button>
-              
+
               {/* Sign Up Button */}
               <Link href="/signup">
                 <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-secondary text-secondary-foreground text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background">
@@ -170,7 +176,10 @@ export default function SignIn() {
                 <div className="space-y-6">
                   {/* Email Field */}
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Email Address
                     </label>
                     <div className="relative">
@@ -196,7 +205,10 @@ export default function SignIn() {
 
                   {/* Password Field */}
                   <div className="space-y-2">
-                    <label htmlFor="password" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="password"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Password
                     </label>
                     <div className="relative">
@@ -211,7 +223,9 @@ export default function SignIn() {
                         onChange={handleInputChange}
                         required
                         className={`flex h-12 w-full rounded-lg border bg-card px-10 pr-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.password ? "border-destructive" : "border-input"
+                          errors.password
+                            ? "border-destructive"
+                            : "border-input"
                         }`}
                       />
                       <button
@@ -219,11 +233,17 @@ export default function SignIn() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="text-destructive text-xs">{errors.password}</p>
+                      <p className="text-destructive text-xs">
+                        {errors.password}
+                      </p>
                     )}
                   </div>
 
@@ -238,7 +258,10 @@ export default function SignIn() {
                         onChange={handleInputChange}
                         className="h-4 w-4 rounded border-input text-[#f9f506] focus:ring-[#f9f506] focus:ring-offset-background"
                       />
-                      <label htmlFor="remember" className="ml-2 text-sm text-muted-foreground">
+                      <label
+                        htmlFor="remember"
+                        className="ml-2 text-sm text-muted-foreground"
+                      >
                         Remember me
                       </label>
                     </div>
@@ -279,7 +302,7 @@ export default function SignIn() {
                 </div>
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">
-                  Don't have an account?{' '}
+                  Don't have an account?{" "}
                   <Link
                     href="/signup"
                     className="font-medium text-[#f9f506] hover:text-[#e6e005] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background rounded-sm"
