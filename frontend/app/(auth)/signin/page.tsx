@@ -3,18 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sun, Moon, User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Sun, Moon, Mail, Lock, Eye, EyeOff } from "lucide-react";
 
-export default function SignUp() {
+export default function SignIn() {
   const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
-    username: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    remember: false,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -49,20 +46,12 @@ export default function SignUp() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (formData.fullName.length < 2) {
-      newErrors.fullName = "Full name must be at least 2 characters";
-    }
-
-    if (formData.username.length < 3) {
-      newErrors.username = "Username must be at least 3 characters";
+    if (!formData.email.includes('@')) {
+      newErrors.email = "Please enter a valid email address";
     }
 
     if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
     }
 
     setErrors(newErrors);
@@ -77,16 +66,15 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fullName: formData.fullName,
-          username: formData.username,
           email: formData.email,
           password: formData.password,
+          remember: formData.remember,
         }),
       });
 
@@ -94,21 +82,21 @@ export default function SignUp() {
         router.push("/dashboard");
       } else {
         const errorMessage = await response.text();
-        setErrors({ general: errorMessage });
+        setErrors({ general: errorMessage || "Invalid email or password" });
       }
     } catch (error) {
       console.error(error);
-      setErrors({ general: "An error occurred during signup" });
+      setErrors({ general: "An error occurred during signin" });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
 
     // Clear error when user starts typing
@@ -151,17 +139,17 @@ export default function SignUp() {
                 )}
               </button>
               
-              {/* Sign In Button */}
-              <Link href="/signin">
+              {/* Sign In Button - Active */}
+              <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-[#e6e005] focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background">
+                <span className="truncate">Sign In</span>
+              </button>
+              
+              {/* Sign Up Button */}
+              <Link href="/signup">
                 <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-secondary text-secondary-foreground text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background">
-                  <span className="truncate">Sign In</span>
+                  <span className="truncate">Sign Up</span>
                 </button>
               </Link>
-              
-              {/* Sign Up Button - Active */}
-              <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold leading-normal tracking-[0.015em] transition-all duration-200 hover:scale-105 hover:bg-[#e6e005] focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background">
-                <span className="truncate">Sign Up</span>
-              </button>
             </div>
           </header>
 
@@ -170,66 +158,16 @@ export default function SignUp() {
             <div className="w-full max-w-md space-y-8">
               <div>
                 <h2 className="mt-6 text-center text-3xl font-bold text-foreground">
-                  Create your account
+                  Welcome back
                 </h2>
                 <p className="mt-2 text-center text-sm text-muted-foreground">
-                  Join AgriView to start monitoring your crops with AI-powered insights.
+                  Sign in to monitor your crops with AI-powered insights.
                 </p>
               </div>
 
-              {/* Signup Form */}
+              {/* Signin Form */}
               <div className="mt-8">
-                <div className="space-y-5">
-                  {/* Full Name Field */}
-                  <div className="space-y-2">
-                    <label htmlFor="fullName" className="text-sm font-medium text-foreground">
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <input
-                        id="fullName"
-                        name="fullName"
-                        type="text"
-                        placeholder="Enter your full name"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        required
-                        className={`flex h-12 w-full rounded-lg border bg-card px-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.fullName ? "border-destructive" : "border-input"
-                        }`}
-                      />
-                    </div>
-                    {errors.fullName && (
-                      <p className="text-destructive text-xs">{errors.fullName}</p>
-                    )}
-                  </div>
-
-                  {/* Username Field */}
-                  <div className="space-y-2">
-                    <label htmlFor="username" className="text-sm font-medium text-foreground">
-                      Username
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <input
-                        id="username"
-                        name="username"
-                        type="text"
-                        placeholder="Choose a username"
-                        value={formData.username}
-                        onChange={handleInputChange}
-                        required
-                        className={`flex h-12 w-full rounded-lg border bg-card px-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.username ? "border-destructive" : "border-input"
-                        }`}
-                      />
-                    </div>
-                    {errors.username && (
-                      <p className="text-destructive text-xs">{errors.username}</p>
-                    )}
-                  </div>
-
+                <div className="space-y-6">
                   {/* Email Field */}
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-sm font-medium text-foreground">
@@ -241,7 +179,8 @@ export default function SignUp() {
                         id="email"
                         name="email"
                         type="email"
-                        placeholder="Enter your email"
+                        autoComplete="email"
+                        placeholder="Enter your email address"
                         value={formData.email}
                         onChange={handleInputChange}
                         required
@@ -266,7 +205,8 @@ export default function SignUp() {
                         id="password"
                         name="password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="Create a password"
+                        autoComplete="current-password"
+                        placeholder="Enter your password"
                         value={formData.password}
                         onChange={handleInputChange}
                         required
@@ -287,36 +227,29 @@ export default function SignUp() {
                     )}
                   </div>
 
-                  {/* Confirm Password Field */}
-                  <div className="space-y-2">
-                    <label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
-                      Confirm Password
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  {/* Remember Me & Forgot Password */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
                       <input
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Confirm your password"
-                        value={formData.confirmPassword}
+                        id="remember"
+                        name="remember"
+                        type="checkbox"
+                        checked={formData.remember}
                         onChange={handleInputChange}
-                        required
-                        className={`flex h-12 w-full rounded-lg border bg-card px-10 pr-10 py-2 text-sm text-card-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
-                          errors.confirmPassword ? "border-destructive" : "border-input"
-                        }`}
+                        className="h-4 w-4 rounded border-input text-[#f9f506] focus:ring-[#f9f506] focus:ring-offset-background"
                       />
-                      <button
-                        type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
+                      <label htmlFor="remember" className="ml-2 text-sm text-muted-foreground">
+                        Remember me
+                      </label>
                     </div>
-                    {errors.confirmPassword && (
-                      <p className="text-destructive text-xs">{errors.confirmPassword}</p>
-                    )}
+                    <div className="text-sm">
+                      <Link
+                        href="/forgot-password"
+                        className="font-medium text-[#f9f506] hover:text-[#e6e005] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background rounded-sm"
+                      >
+                        Forgot your password?
+                      </Link>
+                    </div>
                   </div>
 
                   {/* General Error */}
@@ -337,21 +270,21 @@ export default function SignUp() {
                     {isLoading ? (
                       <div className="flex items-center gap-2">
                         <div className="w-4 h-4 border-2 border-[#181811]/30 border-t-[#181811] rounded-full animate-spin"></div>
-                        Creating Account...
+                        Signing in...
                       </div>
                     ) : (
-                      "Create Account"
+                      "Sign in"
                     )}
                   </button>
                 </div>
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">
-                  Already have an account?{' '}
+                  Don't have an account?{' '}
                   <Link
-                    href="/login"
+                    href="/signup"
                     className="font-medium text-[#f9f506] hover:text-[#e6e005] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f9f506] focus:ring-offset-2 focus:ring-offset-background rounded-sm"
                   >
-                    Sign in here
+                    Sign up here
                   </Link>
                 </p>
               </div>

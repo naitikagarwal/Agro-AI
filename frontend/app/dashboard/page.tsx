@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import DashboardHome from "@/components/dashboard-home"
+
 
 interface User {
   id: string;
@@ -42,7 +44,7 @@ export default function Dashboard() {
   }
 
   if (!userData) {
-    redirect("/api/auth/signin");
+    // redirect("/api/auth/signin");
   }
 
 
@@ -54,20 +56,22 @@ export default function Dashboard() {
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Welcome back, {userData.id}!
+              {/* Welcome back, {userData.id}! */}
             </h1>
             <p className="text-gray-600 mt-2">
-              Good to see you again, @{userData.username}
+              {/* Good to see you again, @{userData.username} */}
             </p>
             
           </div>
         </div>
 
         {/* Rest of dashboard */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow">
+        <div className="">
+            <DashboardHome></DashboardHome>
+          {/* <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Dashboard Stats</h2>
-          </div>
+            
+          </div> */}
         </div>
       </div>
     </SidebarProvider>
