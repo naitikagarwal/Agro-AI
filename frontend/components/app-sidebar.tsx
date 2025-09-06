@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { ChevronDown, ChevronUp } from "lucide-react";
 import FieldModal from "./FieldModal"
 
 // Menu items.

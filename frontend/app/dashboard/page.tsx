@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import DashboardHome from "@/components/dashboard-home"
+import { AppSidebarClient } from "@/components/AppSidebarClient";
 
 
 interface User {
@@ -47,10 +48,12 @@ export default function Dashboard() {
     // redirect("/api/auth/signin");
   }
 
+  const fields = userData?.Fields ?? [];
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebarClient fields={fields} />
+
       <SidebarTrigger />
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
