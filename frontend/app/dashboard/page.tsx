@@ -10,6 +10,10 @@ import {
 } from "@/components/ui/sidebar";
 import DashboardHome from "@/components/dashboard-home";
 import { AppSidebarClient } from "@/components/AppSidebarClient";
+import SignUp from "../(auth)/signup/page";
+import AddDayPage from "../field/[fieldId]/add-day/page";
+import ReportPage from "../report/page";
+import ProfilePage from "../profile/page";
 
 interface User {
   id: string;
@@ -21,6 +25,9 @@ interface User {
 export default function Dashboard() {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [activePage, setActivePage] = useState("home");
+  const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
+
 
   useEffect(() => {
     async function fetchUser() {
@@ -60,12 +67,19 @@ export default function Dashboard() {
   return (
     <div className="!bg-white">
       <SidebarProvider>
-        <AppSidebarClient fields={fields} />
+        <AppSidebarClient fields={fields} setActivePage={setActivePage} setSelectedFieldId={setSelectedFieldId}/>
 
         <SidebarInset className="flex flex-col">
           <SidebarTrigger className="cursor-pointer" />
+          {activePage === "home" && <DashboardHome />}
+          {activePage === "report" && <ReportPage />}
+          {activePage === "profile" && <ProfilePage />}
+          {activePage === "add-day" && selectedFieldId && (
+            <AddDayPage params={{ fieldId: selectedFieldId }} />
+          )}
+          
 
-          <DashboardHome></DashboardHome>
+          {/* <DashboardHome></DashboardHome> */}
         </SidebarInset>
       </SidebarProvider>
     </div>
