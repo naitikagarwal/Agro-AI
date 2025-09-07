@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Sun, Moon, User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function SignUp() {
   const [darkMode, setDarkMode] = useState(false);
@@ -73,31 +74,34 @@ export default function SignUp() {
         <div className="flex h-full grow flex-col">
           {/* Header */}
           <header className="flex items-center justify-between border-b border-border px-10 py-3">
-            <div className="flex items-center gap-4 text-foreground">
-              <div className="size-6 text-green-600">
-                {/* <svg
-                  fill="currentColor"
-                  viewBox="0 0 48 48"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" />
-                </svg> */}
-              </div>
-              <h2 className="text-xl font-bold">AgroAI</h2>
-            </div>
+            <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
+            AI
+          </div>
+          <div>
+            <h1 className="text-lg font-semibold">AgroAI</h1>
+            <p className="text-xs text-slate-500 -mt-0.5">
+              Precision & predictive crop intelligence
+            </p>
+          </div>
+        </div>
 
-            <div className="flex items-center gap-4">
-
-              <Link href="api/auth/signin">
-                <button className="h-10 px-4 rounded-full bg-secondary text-secondary-foreground text-sm font-bold hover:scale-105 hover:bg-secondary/80 transition-all focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2">
-                  Sign In
-                </button>
-              </Link>
-
-              <button className="h-10 px-4 rounded-full bg-green-600 text-white text-sm font-bold hover:scale-105 hover:bg-green-700 transition-all focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2">
-                Sign Up
-              </button>
-            </div>
+            <nav className="flex items-center gap-4">
+          <a className="text-sm text-slate-600 hover:text-slate-900">
+            Features
+          </a>
+          <a className="text-sm text-slate-600 hover:text-slate-900">
+            How it works
+          </a>
+          <a className="text-sm text-slate-600 hover:text-slate-900">Pricing</a>
+          <Link href="api/auth/signin">
+          <Button variant="ghost" size="sm" >
+            Sign in
+          </Button></Link>
+          <Link href="/signup">
+          <Button size="sm">Sign up</Button>
+          </Link>
+        </nav>
           </header>
 
           {/* Main */}
@@ -108,7 +112,7 @@ export default function SignUp() {
                   Create your account
                 </h2>
                 <p className="mt-2 text-center text-sm text-muted-foreground">
-                  Join AgriView to start monitoring your crops with AI-powered insights.
+                  Join AgroAI to start monitoring your crops with AI-powered insights.
                 </p>
               </div>
 
@@ -267,8 +271,8 @@ export default function SignUp() {
               <p className="mt-6 text-center text-sm text-muted-foreground">
                 Already have an account?{" "}
                 <Link
-                  href="/login"
-                  className="font-medium text-green-600 hover:text-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 rounded-sm"
+                  href="/api/auth/signin"
+                  className="font-medium text-green-600 hover:text-green-700 transition-colors focus:outline-none rounded-sm"
                 >
                   Sign in here
                 </Link>

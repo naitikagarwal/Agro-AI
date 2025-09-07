@@ -1,16 +1,31 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { getUser } from "@/lib/action/getUser";
+import { LayoutDashboard } from "lucide-react";
 
 // Landing page component for the AI-powered agriculture platform
 // Built with Tailwind + shadcn components. Drop this file into a React/Vite app.
 
 export default function Home() {
+    const [userData, setUserData] = useState<any>(null);
+
+    useEffect(() => {
+      async function fetchUser() {
+        const res = await getUser();
+        setUserData(res.user);
+        console.log(res.user);
+        // setLoading(false);
+      }
+      fetchUser();
+    }, []);
+
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-scree text-slate-900">
       {/* Header */}
       <header className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -33,13 +48,24 @@ export default function Home() {
             How it works
           </a>
           <a className="text-sm text-slate-600 hover:text-slate-900">Pricing</a>
-          <Link href="api/auth/signin">
-          <Button variant="ghost" size="sm" >
-            Sign in
-          </Button></Link>
-          <Link href="/signup">
-          <Button size="sm">Sign up</Button>
-          </Link>
+          {userData ? (
+  <Link href="/dashboard">
+    <Button size="sm" className="cursor-pointer">
+      <LayoutDashboard className="w-4 h-4" />Dashboard</Button>
+  </Link>
+) : (
+  <div className="flex gap-2">
+    <Link href="/api/auth/signin">
+      <Button variant="ghost" size="sm" className="cursor-pointer">
+        Sign in
+      </Button>
+    </Link>
+    <Link href="/signup">
+      <Button size="sm" className="cursor-pointer">Sign up</Button>
+    </Link>
+  </div>
+)}
+
         </nav>
       </header>
 
@@ -55,13 +81,6 @@ export default function Home() {
             sensors to detect vegetation stress, predict pest outbreaks, and
             deliver localized alerts so you can act before losses occur.
           </p>
-
-          <div className="mt-6 flex gap-3">
-            <Button size="lg">Get started — Sign up</Button>
-            <Button variant="ghost" size="lg">
-              Request demo
-            </Button>
-          </div>
 
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="text-sm">

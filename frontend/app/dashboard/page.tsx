@@ -14,6 +14,7 @@ import SignUp from "../(auth)/signup/page";
 import AddDayPage from "../field/[fieldId]/add-day/page";
 import ReportPage from "../report/page";
 import ProfilePage from "../profile/page";
+import OverviewPage from "../overview/page";
 
 interface User {
   id: string;
@@ -71,7 +72,7 @@ export default function Dashboard() {
 
         <SidebarInset className="flex flex-col">
           <SidebarTrigger className="cursor-pointer" />
-          {activePage === "home" && <DashboardHome />}
+          {activePage === "home" && <OverviewPage />}
           {activePage === "report" && <ReportPage />}
           {activePage === "profile" && <ProfilePage />}
           {activePage === "add-day" && selectedFieldId && (
