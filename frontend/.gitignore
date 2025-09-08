@@ -42,3 +42,7 @@ next-env.d.ts
 
 # Ignore lib/db/data directory at the root
 /lib/db/data
+
+# Uploads
+public/uploads/*
+!public/uploads/.gitkeep

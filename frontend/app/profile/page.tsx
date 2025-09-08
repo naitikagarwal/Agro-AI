@@ -4,26 +4,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { getUser } from "@/lib/action/getUser";
 
-/* -------------------------
-   Sample farmer data
-   ------------------------- */
-const farmer = {
-  name: "Ravi Sharma",
-  email: "ravi.sharma@example.com",
-  phone: "+91 98765 43210",
-  location: "Punjab, India",
-  joined: "2022-03-14",
-  fieldsOwned: 5,
-  totalAcres: 120,
-  avgHealth: 72,
-  avgPestRisk: 18,
-  bio: "Progressive farmer using AI-powered insights to maximize yield and minimize risk.",
-};
-
-/* -------------------------
-   Components
-   ------------------------- */
-
 function StatCard({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-emerald-50">

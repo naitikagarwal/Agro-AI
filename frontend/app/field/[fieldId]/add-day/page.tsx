@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import Image from "next/image";
 import {
   ArrowLeft,
   Calendar,
@@ -16,6 +17,8 @@ import {
   Leaf,
   Thermometer,
   XCircle,
+  X,
+  Upload,
 } from "lucide-react";
 
 export default function AddDayPage({
@@ -25,6 +28,7 @@ export default function AddDayPage({
 }) {
   const fieldId = params.fieldId;
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
     date: "",
@@ -43,8 +47,10 @@ export default function AddDayPage({
     evapotranspiration: "",
     solarPAR: "",
     notes: "",
-    imageUrls: "",
   });
+  
+  const [images, setImages] = useState<string[]>([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -55,6 +61,46 @@ export default function AddDayPage({
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setSuccess(null);
   }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingImages(true);
+    
+    try {
+      const formData = new FormData();
+      Array.from(files).forEach((file) => {
+        formData.append('files', file);
+      });
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setImages(prev => [...prev, ...result.urls]);
+        toast.success(`${result.urls.length} image(s) uploaded successfully`);
+      } else {
+        toast.error('Failed to upload images');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload images');
+    } finally {
+      setUploadingImages(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const removeImage = (indexToRemove: number) => {
+    setImages(prev => prev.filter((_, index) => index !== indexToRemove));
+  };
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -92,12 +138,7 @@ export default function AddDayPage({
         : null,
       solarPAR: form.solarPAR ? parseFloat(form.solarPAR) : null,
       notes: form.notes || null,
-      imageUrls: form.imageUrls
-        ? form.imageUrls
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : [],
+      imageUrls: images, // Send the uploaded image URLs
     };
 
     try {
@@ -111,7 +152,7 @@ export default function AddDayPage({
         setLoading(true);
         const data = await res.json();
         toast.success(`Daywise data added for ${data.date}`);
-        router.push(`/dashboard/field/${fieldId}`); // 👈 go back to field details
+        router.push(`/dashboard/field/${fieldId}`);
         router.refresh();
       } else if (res.status === 409) {
         toast.error("Day entry for this date already exists for this field.");
@@ -354,41 +395,83 @@ export default function AddDayPage({
                   />
                 </div>
 
-                {/* <div>
-                  <label className="block text-sm mb-2 flex items-center gap-2">
-                    <ImageIcon className="w-4 h-4" /> Image URLs (comma separated)
+                {/* Image Upload Section */}
+                <div>
+                  <label className="block text-sm mb-2 items-center gap-2">
+                    <ImageIcon className="w-4 h-4" /> Images
                   </label>
-                  <Input name="imageUrls" value={form.imageUrls} onChange={onChange} placeholder="https://... , https://..." />
+                  
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                    <div className="text-center">
+                      <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+                      <div className="mt-4">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={uploadingImages}
+                          className="flex items-center gap-2"
+                        >
+                          <Upload className="w-4 h-4" />
+                          {uploadingImages ? 'Uploading...' : 'Upload Images'}
+                        </Button>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                      </div>
+                      <p className="mt-2 text-sm text-gray-500">
+                        PNG, JPG, GIF up to 10MB each
+                      </p>
+                    </div>
+                  </div>
 
+                  {/* Image Preview Grid */}
                   {images.length > 0 && (
-                    <div className="mt-3 grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                       {images.map((src, idx) => (
-                        <div key={idx} className="w-full h-28 rounded overflow-hidden border bg-white flex items-center justify-center">
-                          <img
-                            src={src}
-                            alt={`preview-${idx}`}
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src =
-                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='140'/%3E";
-                            }}
-                            className="object-cover w-full h-full"
-                          />
+                        <div key={idx} className="relative group">
+                          <div className="aspect-square rounded-lg overflow-hidden border bg-white">
+                            <Image
+                              src={src}
+                              alt={`Upload preview ${idx + 1}`}
+                              width={200}
+                              height={200}
+                              className="object-cover w-full h-full"
+                              onError={() => {
+                                console.error(`Failed to load image: ${src}`);
+                              }}
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => removeImage(idx)}
+                            className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
                         </div>
                       ))}
                     </div>
                   )}
-                </div> */}
+                </div>
 
                 <div className="flex items-center justify-end gap-3">
                   <Button
                     type="button"
                     variant="ghost"
                     onClick={() => router.back()}
-                    disabled={loading}
+                    disabled={loading || uploadingImages}
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={loading}>
+                  <Button type="submit" disabled={loading || uploadingImages}>
                     {loading ? "Saving..." : "Save"}
                   </Button>
                 </div>
