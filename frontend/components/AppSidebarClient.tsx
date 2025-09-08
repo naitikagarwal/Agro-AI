@@ -17,6 +17,7 @@ import {
 import { ChevronDown, ChevronUp } from "lucide-react";
 import FieldModal from "./FieldModal";
 import { Button } from "./ui/button";
+import LogoutButton from "./LogoutButton";
 
 type DaywiseItem = {
     id: number;
@@ -207,9 +208,7 @@ export function AppSidebarClient({ fields, setActivePage, setSelectedFieldId }: 
             </SidebarContent>
 
             <SidebarFooter>
-                <Button variant={"destructive"} className="w-full">
-                    Logout
-                </Button>
+                <LogoutButton/>
             </SidebarFooter>
         </Sidebar >
     );
