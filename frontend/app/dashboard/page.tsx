@@ -29,7 +29,6 @@ export default function Dashboard() {
   const [activePage, setActivePage] = useState("home");
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
 
-
   useEffect(() => {
     async function fetchUser() {
       const res = await getUser();
@@ -68,7 +67,11 @@ export default function Dashboard() {
   return (
     <div className="!bg-white">
       <SidebarProvider>
-        <AppSidebarClient fields={fields} setActivePage={setActivePage} setSelectedFieldId={setSelectedFieldId}/>
+        <AppSidebarClient
+          fields={fields}
+          setActivePage={setActivePage}
+          setSelectedFieldId={setSelectedFieldId}
+        />
 
         <SidebarInset className="flex flex-col">
           <SidebarTrigger className="cursor-pointer" />
@@ -78,7 +81,6 @@ export default function Dashboard() {
           {activePage === "add-day" && selectedFieldId && (
             <AddDayPage params={{ fieldId: selectedFieldId }} />
           )}
-          
 
           {/* <DashboardHome></DashboardHome> */}
         </SidebarInset>

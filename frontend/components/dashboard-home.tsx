@@ -7,9 +7,7 @@ const DashboardHome = () => {
       <main className="p-8">
         <header className="mb-8">
           <h1 className="text-4xl font-bold">Dashboard</h1>
-          <p className=" mt-1">
-            Overview of system status and key metrics
-          </p>
+          <p className=" mt-1">Overview of system status and key metrics</p>
         </header>
 
         {/* System Status Section */}

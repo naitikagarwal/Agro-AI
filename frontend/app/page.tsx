@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -12,17 +12,17 @@ import { LayoutDashboard } from "lucide-react";
 // Built with Tailwind + shadcn components. Drop this file into a React/Vite app.
 
 export default function Home() {
-    const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<any>(null);
 
-    useEffect(() => {
-      async function fetchUser() {
-        const res = await getUser();
-        setUserData(res.user);
-        console.log(res.user);
-        // setLoading(false);
-      }
-      fetchUser();
-    }, []);
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await getUser();
+      setUserData(res.user);
+      console.log(res.user);
+      // setLoading(false);
+    }
+    fetchUser();
+  }, []);
 
   return (
     <div className="min-h-scree text-slate-900">
@@ -49,23 +49,26 @@ export default function Home() {
           </a>
           <a className="text-sm text-slate-600 hover:text-slate-900">Pricing</a>
           {userData ? (
-  <Link href="/dashboard">
-    <Button size="sm" className="cursor-pointer">
-      <LayoutDashboard className="w-4 h-4" />Dashboard</Button>
-  </Link>
-) : (
-  <div className="flex gap-2">
-    <Link href="/api/auth/signin">
-      <Button variant="ghost" size="sm" className="cursor-pointer">
-        Sign in
-      </Button>
-    </Link>
-    <Link href="/signup">
-      <Button size="sm" className="cursor-pointer">Sign up</Button>
-    </Link>
-  </div>
-)}
-
+            <Link href="/dashboard">
+              <Button size="sm" className="cursor-pointer">
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <div className="flex gap-2">
+              <Link href="/api/auth/signin">
+                <Button variant="ghost" size="sm" className="cursor-pointer">
+                  Sign in
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm" className="cursor-pointer">
+                  Sign up
+                </Button>
+              </Link>
+            </div>
+          )}
         </nav>
       </header>
 

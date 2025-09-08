@@ -38,20 +38,19 @@ function StatCard({ label, value }: { label: string; value: React.ReactNode }) {
    ------------------------- */
 
 export default function ProfilePage() {
-
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
-      async function fetchUser() {
-        const res = await getUser();
-        setUserData(res.user);
-        console.log(res.user);
-        setLoading(false);
-        // console.log(userData);
-      }
-      fetchUser();
-    }, []);
+    async function fetchUser() {
+      const res = await getUser();
+      setUserData(res.user);
+      console.log(res.user);
+      setLoading(false);
+      // console.log(userData);
+    }
+    fetchUser();
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
       {/* Cover */}
@@ -66,7 +65,9 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto px-4 pt-20 pb-10">
         {/* Profile Header */}
         <div className="text-center">
-          <h1 className="text-2xl font-extrabold text-emerald-900">{userData ? <p>{userData.fullName}</p> : <p>Loading...</p>}</h1>
+          <h1 className="text-2xl font-extrabold text-emerald-900">
+            {userData ? <p>{userData.fullName}</p> : <p>Loading...</p>}
+          </h1>
 
           <div className="mt-4 flex justify-center gap-3">
             <Link
@@ -88,13 +89,25 @@ export default function ProfilePage() {
 
         {/* Contact Info */}
         <section className="bg-white mt-8 rounded-lg shadow-sm border border-emerald-50 p-6">
-          <h2 className="text-lg font-semibold text-emerald-800 mb-4">Contact Information</h2>
+          <h2 className="text-lg font-semibold text-emerald-800 mb-4">
+            Contact Information
+          </h2>
           <div className="space-y-2 text-slate-700">
             <p>
-              <span className="font-medium">Email:</span>{userData ? <span> {userData.email}</span> : <span>Loading...</span>}
+              <span className="font-medium">Email:</span>
+              {userData ? (
+                <span> {userData.email}</span>
+              ) : (
+                <span>Loading...</span>
+              )}
             </p>
             <p>
-              <span className="font-medium">Username:</span>{userData ?  <span> {userData.username}</span> : <span>Loading...</span>}
+              <span className="font-medium">Username:</span>
+              {userData ? (
+                <span> {userData.username}</span>
+              ) : (
+                <span>Loading...</span>
+              )}
             </p>
             <p>
               <p>Total Fields: {userData?.Fields?.length ?? 0}</p>

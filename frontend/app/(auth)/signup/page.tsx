@@ -21,13 +21,16 @@ export default function SignUp() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();
 
-
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (formData.fullName.length < 2) newErrors.fullName = "Full name must be at least 2 characters";
-    if (formData.username.length < 3) newErrors.username = "Username must be at least 3 characters";
-    if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+    if (formData.fullName.length < 2)
+      newErrors.fullName = "Full name must be at least 2 characters";
+    if (formData.username.length < 3)
+      newErrors.username = "Username must be at least 3 characters";
+    if (formData.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+    if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -75,33 +78,36 @@ export default function SignUp() {
           {/* Header */}
           <header className="flex items-center justify-between border-b border-border px-10 py-3">
             <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
-            AI
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold">AgroAI</h1>
-            <p className="text-xs text-slate-500 -mt-0.5">
-              Precision & predictive crop intelligence
-            </p>
-          </div>
-        </div>
+              <div className="h-10 w-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
+                AI
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold">AgroAI</h1>
+                <p className="text-xs text-slate-500 -mt-0.5">
+                  Precision & predictive crop intelligence
+                </p>
+              </div>
+            </div>
 
             <nav className="flex items-center gap-4">
-          <a className="text-sm text-slate-600 hover:text-slate-900">
-            Features
-          </a>
-          <a className="text-sm text-slate-600 hover:text-slate-900">
-            How it works
-          </a>
-          <a className="text-sm text-slate-600 hover:text-slate-900">Pricing</a>
-          <Link href="api/auth/signin">
-          <Button variant="ghost" size="sm" >
-            Sign in
-          </Button></Link>
-          <Link href="/signup">
-          <Button size="sm">Sign up</Button>
-          </Link>
-        </nav>
+              <a className="text-sm text-slate-600 hover:text-slate-900">
+                Features
+              </a>
+              <a className="text-sm text-slate-600 hover:text-slate-900">
+                How it works
+              </a>
+              <a className="text-sm text-slate-600 hover:text-slate-900">
+                Pricing
+              </a>
+              <Link href="api/auth/signin">
+                <Button variant="ghost" size="sm">
+                  Sign in
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm">Sign up</Button>
+              </Link>
+            </nav>
           </header>
 
           {/* Main */}
@@ -112,7 +118,8 @@ export default function SignUp() {
                   Create your account
                 </h2>
                 <p className="mt-2 text-center text-sm text-muted-foreground">
-                  Join AgroAI to start monitoring your crops with AI-powered insights.
+                  Join AgroAI to start monitoring your crops with AI-powered
+                  insights.
                 </p>
               </div>
 
@@ -137,7 +144,11 @@ export default function SignUp() {
                       }`}
                     />
                   </div>
-                  {errors.fullName && <p className="text-destructive text-xs">{errors.fullName}</p>}
+                  {errors.fullName && (
+                    <p className="text-destructive text-xs">
+                      {errors.fullName}
+                    </p>
+                  )}
                 </div>
 
                 {/* Username */}
@@ -159,7 +170,11 @@ export default function SignUp() {
                       }`}
                     />
                   </div>
-                  {errors.username && <p className="text-destructive text-xs">{errors.username}</p>}
+                  {errors.username && (
+                    <p className="text-destructive text-xs">
+                      {errors.username}
+                    </p>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -181,7 +196,9 @@ export default function SignUp() {
                       }`}
                     />
                   </div>
-                  {errors.email && <p className="text-destructive text-xs">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="text-destructive text-xs">{errors.email}</p>
+                  )}
                 </div>
 
                 {/* Password */}
@@ -207,15 +224,26 @@ export default function SignUp() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                     >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </button>
                   </div>
-                  {errors.password && <p className="text-destructive text-xs">{errors.password}</p>}
+                  {errors.password && (
+                    <p className="text-destructive text-xs">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
 
                 {/* Confirm Password */}
                 <div className="space-y-2">
-                  <label htmlFor="confirmPassword" className="text-sm font-medium">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="text-sm font-medium"
+                  >
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -228,26 +256,36 @@ export default function SignUp() {
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
                       className={`flex h-12 w-full rounded-lg border border-solid border-gray-300 px-10 pr-10 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-green-600 transition-all ${
-                       errors.confirmPassword ? "border-destructive" : ""
+                        errors.confirmPassword ? "border-destructive" : ""
                       }`}
                     />
                     <button
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                     >
-                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </button>
                   </div>
                   {errors.confirmPassword && (
-                    <p className="text-destructive text-xs">{errors.confirmPassword}</p>
+                    <p className="text-destructive text-xs">
+                      {errors.confirmPassword}
+                    </p>
                   )}
                 </div>
 
                 {/* General Error */}
                 {errors.general && (
                   <div className="rounded-lg border border-destructive bg-destructive/10 p-3">
-                    <p className="text-destructive text-sm font-medium">{errors.general}</p>
+                    <p className="text-destructive text-sm font-medium">
+                      {errors.general}
+                    </p>
                   </div>
                 )}
 

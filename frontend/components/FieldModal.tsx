@@ -120,7 +120,7 @@ export default function FieldModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-lg rounded-2xl p-6 bg-neutral-900 backdrop-blur-md  shadow-xl text-white">
+      <DialogContent className="sm:max-w-lg rounded-2xl p-6 bg-white backdrop-blur-md  shadow-xl text-black">
         <DialogHeader className="mb-2">
           <div className="flex items-start justify-between gap-4">
             <div>

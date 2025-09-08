@@ -49,33 +49,36 @@ export default function SignIn() {
           {/* Header */}
           <header className="flex items-center justify-between border-b border-border px-10 py-3">
             <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
-            AI
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold">AgroAI</h1>
-            <p className="text-xs text-slate-500 -mt-0.5">
-              Precision & predictive crop intelligence
-            </p>
-          </div>
-        </div>
+              <div className="h-10 w-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
+                AI
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold">AgroAI</h1>
+                <p className="text-xs text-slate-500 -mt-0.5">
+                  Precision & predictive crop intelligence
+                </p>
+              </div>
+            </div>
 
             <nav className="flex items-center gap-4">
-          <a className="text-sm text-slate-600 hover:text-slate-900">
-            Features
-          </a>
-          <a className="text-sm text-slate-600 hover:text-slate-900">
-            How it works
-          </a>
-          <a className="text-sm text-slate-600 hover:text-slate-900">Pricing</a>
-          <Link href="api/auth/signin">
-          <Button variant="ghost" size="sm" >
-            Sign in
-          </Button></Link>
-          <Link href="/signup">
-          <Button size="sm">Sign up</Button>
-          </Link>
-        </nav>
+              <a className="text-sm text-slate-600 hover:text-slate-900">
+                Features
+              </a>
+              <a className="text-sm text-slate-600 hover:text-slate-900">
+                How it works
+              </a>
+              <a className="text-sm text-slate-600 hover:text-slate-900">
+                Pricing
+              </a>
+              <Link href="api/auth/signin">
+                <Button variant="ghost" size="sm">
+                  Sign in
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm">Sign up</Button>
+              </Link>
+            </nav>
           </header>
 
           {/* Main */}

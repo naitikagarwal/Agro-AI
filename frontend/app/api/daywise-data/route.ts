@@ -22,11 +22,14 @@ export async function POST(req: Request) {
       evapotranspiration,
       solarPAR,
       notes,
-      imageUrls = []
+      imageUrls = [],
     } = body;
 
     if (!fieldId || !date) {
-      return NextResponse.json({ error: "fieldId and date are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "fieldId and date are required" },
+        { status: 400 },
+      );
     }
 
     // create daywise data (date stored as ISO)
@@ -62,7 +65,10 @@ export async function POST(req: Request) {
 
       // create images if provided (simple URL list)
       if (Array.isArray(imageUrls) && imageUrls.length > 0) {
-        const imagesData = imageUrls.map((url: string) => ({ daywiseDataId: created.id, url }));
+        const imagesData = imageUrls.map((url: string) => ({
+          daywiseDataId: created.id,
+          url,
+        }));
         await prisma.daywiseImage.createMany({
           data: imagesData,
         });
@@ -71,19 +77,24 @@ export async function POST(req: Request) {
       // return the created entry including images
       const result = await prisma.daywiseData.findUnique({
         where: { id: created.id },
-        include: { images: true }
+        include: { images: true },
       });
 
       return NextResponse.json(result, { status: 201 });
     } catch (err: any) {
       // if unique constraint fails (duplicate date for same field)
       if (err?.code === "P2002") {
-        return NextResponse.json({ error: "Entry for this date already exists" }, { status: 409 });
+        return NextResponse.json(
+          { error: "Entry for this date already exists" },
+          { status: 409 },
+        );
       }
       console.error(err);
-      return NextResponse.json({ error: "Failed to create daywise data" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Failed to create daywise data" },
+        { status: 500 },
+      );
     }
-
   } catch (error) {
     console.error("POST /api/daywise-data error:", error);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });

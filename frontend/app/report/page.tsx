@@ -79,7 +79,13 @@ function Badge({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SmallStat({ label, value }: { label: string; value: string | number }) {
+function SmallStat({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) {
   return (
     <div className="bg-white/60 backdrop-blur rounded-lg p-3 shadow-sm">
       <div className="text-xs text-slate-600">{label}</div>
@@ -142,8 +148,18 @@ function AnomalyMap({
           const cy = a.y * height;
           const color = anomalyColor(a.type);
           return (
-            <g key={a.id} transform={`translate(${cx}, ${cy})`} className="cursor-pointer">
-              <circle r={18} fill={color} fillOpacity={0.18} stroke={color} strokeWidth={2} />
+            <g
+              key={a.id}
+              transform={`translate(${cx}, ${cy})`}
+              className="cursor-pointer"
+            >
+              <circle
+                r={18}
+                fill={color}
+                fillOpacity={0.18}
+                stroke={color}
+                strokeWidth={2}
+              />
               <text
                 x={0}
                 y={6}
@@ -160,7 +176,9 @@ function AnomalyMap({
       </svg>
       <div className="px-3 py-2 flex items-center justify-between bg-emerald-50">
         <div className="text-sm text-slate-700">Field image (annotated)</div>
-        <div className="text-xs text-slate-500">Annotated: {sampleCNN.annotatedAt}</div>
+        <div className="text-xs text-slate-500">
+          Annotated: {sampleCNN.annotatedAt}
+        </div>
       </div>
     </div>
   );
@@ -176,10 +194,14 @@ function RiskMapGrid({ matrix }: { matrix: number[][] }) {
     if (v === 1) return "#FEF3C7"; // yellow-ish
     return "#FEE2E2"; // red-ish
   };
-  const labelFor = (v: number) => (v === 0 ? "Low" : v === 1 ? "Medium" : "High");
+  const labelFor = (v: number) =>
+    v === 0 ? "Low" : v === 1 ? "Medium" : "High";
   return (
     <div>
-      <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${cols}, ${size}px)` }}>
+      <div
+        className="grid gap-1"
+        style={{ gridTemplateColumns: `repeat(${cols}, ${size}px)` }}
+      >
         {matrix.flatMap((row) =>
           row.map((cell, j) => (
             <div
@@ -213,12 +235,16 @@ export default function ReportPage() {
   const lstm = sampleLSTM;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
         <header className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-emerald-900">AgroAI - Field Report</h1>
-            <p className="text-sm text-slate-600 mt-1">Prediction snapshot & future horizon (LSTM & CNN)</p>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-emerald-900">
+              AgroAI - Field Report
+            </h1>
+            <p className="text-sm text-slate-600 mt-1">
+              Prediction snapshot & future horizon (LSTM & CNN)
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <button className="px-3 py-2 rounded-md bg-emerald-600 text-white text-sm font-medium shadow-sm">
@@ -229,10 +255,22 @@ export default function ReportPage() {
 
         {/* Top summary */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <SmallStat label="Next horizon" value={`${lstm.horizonDays.length} days`} />
-          <SmallStat label="Latest anomaly (CNN)" value={cnn.anomalies.length > 0 ? "Yes" : "No"} />
-          <SmallStat label="Pest risk (next day)" value={`${Math.round(lstm.forecasts[0].PestRiskScore * 100)}%`} />
-          <SmallStat label="Soil moisture (day1)" value={`${lstm.forecasts[0].SoilMoistureForecast.pct}%`} />
+          <SmallStat
+            label="Next horizon"
+            value={`${lstm.horizonDays.length} days`}
+          />
+          <SmallStat
+            label="Latest anomaly (CNN)"
+            value={cnn.anomalies.length > 0 ? "Yes" : "No"}
+          />
+          <SmallStat
+            label="Pest risk (next day)"
+            value={`${Math.round(lstm.forecasts[0].PestRiskScore * 100)}%`}
+          />
+          <SmallStat
+            label="Soil moisture (day1)"
+            value={`${lstm.forecasts[0].SoilMoistureForecast.pct}%`}
+          />
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -245,7 +283,9 @@ export default function ReportPage() {
             />
 
             <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50">
-              <h2 className="font-semibold text-lg text-emerald-800 mb-3">Detected anomalies</h2>
+              <h2 className="font-semibold text-lg text-emerald-800 mb-3">
+                Detected anomalies
+              </h2>
               <div className="grid gap-3">
                 {cnn.anomalies.map((a) => (
                   <div key={a.id} className="flex items-center justify-between">
@@ -259,12 +299,16 @@ export default function ReportPage() {
                       <div>
                         <div className="text-sm font-semibold">{a.type}</div>
                         <div className="text-xs text-slate-500">
-                          pos: ({(a.x * 100).toFixed(0)}%, {(a.y * 100).toFixed(0)}%), confidence:{" "}
+                          pos: ({(a.x * 100).toFixed(0)}%,{" "}
+                          {(a.y * 100).toFixed(0)}%), confidence:{" "}
                           {(a.confidence * 100).toFixed(0)}%
                         </div>
                       </div>
                     </div>
-                    <div className="text-xs text-slate-600">Action suggestions: <span className="font-medium">Inspect</span></div>
+                    <div className="text-xs text-slate-600">
+                      Action suggestions:{" "}
+                      <span className="font-medium">Inspect</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -274,19 +318,31 @@ export default function ReportPage() {
           {/* Right column: LSTM forecasts (one card per day) */}
           <aside className="space-y-4">
             <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50">
-              <h3 className="font-semibold text-emerald-800">LSTM Forecasts (future steps)</h3>
-              <p className="text-xs text-slate-500 mt-1">Predictions use past sensor & spectral sequences.</p>
+              <h3 className="font-semibold text-emerald-800">
+                LSTM Forecasts (future steps)
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Predictions use past sensor & spectral sequences.
+              </p>
             </div>
 
             {lstm.forecasts.map((f) => (
-              <div key={f.day} className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50">
+              <div
+                key={f.day}
+                className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50"
+              >
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <div className="text-sm font-semibold">{f.day}</div>
-                    <div className="text-xs text-slate-500">Crop Health: <span className="font-medium">{f.CropHealthScore}</span></div>
+                    <div className="text-xs text-slate-500">
+                      Crop Health:{" "}
+                      <span className="font-medium">{f.CropHealthScore}</span>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-semibold">{(f.CropHealthNumeric * 100).toFixed(0)}%</div>
+                    <div className="text-sm font-semibold">
+                      {(f.CropHealthNumeric * 100).toFixed(0)}%
+                    </div>
                     <div className="text-xs text-slate-500">Health score</div>
                   </div>
                 </div>
@@ -294,11 +350,16 @@ export default function ReportPage() {
                 <div className="grid grid-cols-2 gap-3 mb-3">
                   <div className="rounded p-2 bg-emerald-50">
                     <div className="text-xs text-slate-600">Soil moisture</div>
-                    <div className="text-lg font-semibold">{f.SoilMoistureForecast.mm} mm ({f.SoilMoistureForecast.pct}%)</div>
+                    <div className="text-lg font-semibold">
+                      {f.SoilMoistureForecast.mm} mm (
+                      {f.SoilMoistureForecast.pct}%)
+                    </div>
                   </div>
                   <div className="rounded p-2 bg-emerald-50">
                     <div className="text-xs text-slate-600">Pest risk</div>
-                    <div className="text-lg font-semibold">{(f.PestRiskScore * 100).toFixed(0)}%</div>
+                    <div className="text-lg font-semibold">
+                      {(f.PestRiskScore * 100).toFixed(0)}%
+                    </div>
                   </div>
                 </div>
 
@@ -308,8 +369,16 @@ export default function ReportPage() {
                 </div>
 
                 <div className="mt-3 text-xs text-slate-600 flex items-center justify-between">
-                  <div>AnomalyDetected: <span className="font-medium">{f.AnomalyDetected ? "Yes" : "No"}</span></div>
-                  <div>Model timestamp: <span className="text-slate-500">{lstm.predictedAt}</span></div>
+                  <div>
+                    AnomalyDetected:{" "}
+                    <span className="font-medium">
+                      {f.AnomalyDetected ? "Yes" : "No"}
+                    </span>
+                  </div>
+                  <div>
+                    Model timestamp:{" "}
+                    <span className="text-slate-500">{lstm.predictedAt}</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -317,7 +386,12 @@ export default function ReportPage() {
         </div>
 
         <footer className="mt-8 text-sm text-slate-500">
-          <div>Notes: CNN provides anomaly positions and types. LSTM predicts multi-day horizon outputs (health, soil moisture, pest risk, risk maps). Replace <code>sampleCNN</code> and <code>sampleLSTM</code> with your real model outputs in the page or fetch from your API.</div>
+          <div>
+            Notes: CNN provides anomaly positions and types. LSTM predicts
+            multi-day horizon outputs (health, soil moisture, pest risk, risk
+            maps). Replace <code>sampleCNN</code> and <code>sampleLSTM</code>{" "}
+            with your real model outputs in the page or fetch from your API.
+          </div>
         </footer>
       </div>
     </div>
