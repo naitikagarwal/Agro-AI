@@ -89,9 +89,7 @@ export default function ProfilePage() {
                 <span>Loading...</span>
               )}
             </p>
-            <p>
               <p>Total Fields: {userData?.Fields?.length ?? 0}</p>
-            </p>
           </div>
         </section>
 
