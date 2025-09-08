@@ -81,8 +81,6 @@ export default function Dashboard() {
           {activePage === "add-day" && selectedFieldId && (
             <AddDayPage params={{ fieldId: selectedFieldId }} />
           )}
-
-          {/* <DashboardHome></DashboardHome> */}
         </SidebarInset>
       </SidebarProvider>
     </div>

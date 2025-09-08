@@ -1,4 +1,13 @@
 -- CreateTable
+CREATE TABLE "User" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "fullName" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "Field" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "userId" INTEGER NOT NULL,
@@ -48,11 +57,11 @@ CREATE TABLE "DaywiseResult" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "fieldId" INTEGER NOT NULL,
     "date" DATETIME NOT NULL,
-    "plantStressScore" REAL,
-    "diseaseRiskProbability" REAL,
-    "irrigationRecommendation" TEXT,
-    "nutrientRecommendation" TEXT,
-    "otherRecommendations" TEXT,
+    "cropHealthScore" TEXT,
+    "soilMoistureForecast" REAL,
+    "pestRiskScore" REAL,
+    "anomalyDetected" BOOLEAN,
+    "riskMap" JSONB,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "DaywiseResult_fieldId_fkey" FOREIGN KEY ("fieldId") REFERENCES "Field" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -68,10 +77,18 @@ CREATE TABLE "FinalResult" (
     "averageCanopyTemp" REAL,
     "avgPlantStressScore" REAL,
     "yieldEstimate" REAL,
+    "avgPestRiskScore" REAL,
+    "overallHealthStatus" TEXT,
     "recommendations" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "FinalResult_fieldId_fkey" FOREIGN KEY ("fieldId") REFERENCES "Field" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE INDEX "Field_userId_idx" ON "Field"("userId");
