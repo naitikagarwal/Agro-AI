@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,13 @@ import {
   X,
   Upload,
 } from "lucide-react";
+import { getUser } from "@/lib/action/getUser";
+type FormState = {
+  airTemperature: string | number;
+  humidity: string | number;
+  rainfall: string | number;
+  // ...other fields
+};
 
 export default function AddDayPage({
   params,
@@ -48,12 +55,32 @@ export default function AddDayPage({
     solarPAR: "",
     notes: "",
   });
-  
+
   const [images, setImages] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [load, setLoad] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const [userData, setUserData] = useState<any>(null);
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await getUser();
+      setUserData(res.user);
+      console.log(res.user);
+      setLoad(false);
+    }
+    fetchUser();
+  }, []);
+  const idNum = Number(fieldId);
+  const field = useMemo(
+    () => userData?.Fields?.find((f: any) => f?.id === idNum) ?? null,
+    [userData, idNum],
+  );
+
+  const fieldName = field?.name ?? null;
+  const fieldLocation = field?.location ?? null;
 
   function onChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -67,39 +94,39 @@ export default function AddDayPage({
     if (!files || files.length === 0) return;
 
     setUploadingImages(true);
-    
+
     try {
       const formData = new FormData();
       Array.from(files).forEach((file) => {
-        formData.append('files', file);
+        formData.append("files", file);
       });
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
+      const response = await fetch("/api/upload", {
+        method: "POST",
         body: formData,
       });
 
       if (response.ok) {
         const result = await response.json();
-        setImages(prev => [...prev, ...result.urls]);
+        setImages((prev) => [...prev, ...result.urls]);
         toast.success(`${result.urls.length} image(s) uploaded successfully`);
       } else {
-        toast.error('Failed to upload images');
+        toast.error("Failed to upload images");
       }
     } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('Failed to upload images');
+      console.error("Upload error:", error);
+      toast.error("Failed to upload images");
     } finally {
       setUploadingImages(false);
       // Reset file input
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
 
   const removeImage = (indexToRemove: number) => {
-    setImages(prev => prev.filter((_, index) => index !== indexToRemove));
+    setImages((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
   async function handleSubmit(e: React.FormEvent) {
@@ -168,6 +195,84 @@ export default function AddDayPage({
     }
   }
 
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!fieldLocation) return;
+
+    let cancelled = false;
+    async function fetchWeather() {
+      try {
+        setErr(null);
+        setLoading(true);
+
+        const res = await fetch(
+          `/api/weather?location=${encodeURIComponent(fieldLocation)}`,
+        );
+        const payload = await res.json();
+
+        if (!res.ok) {
+          // payload may contain an error object from WeatherAPI; show friendly message
+          const message =
+            payload?.error?.message || payload?.error || "Weather fetch failed";
+          throw new Error(message);
+        }
+
+        // payload.data is WeatherAPI response (we wrapped it in { data } in the server route)
+        const data = payload?.data ?? payload;
+        const current = data?.current ?? data;
+        const temp_c = current?.temp_c;
+        const humidity = current?.humidity;
+        const precip_mm = current?.precip_mm ?? 0;
+
+        if (!cancelled) {
+          setForm((prev) => {
+            const next = {
+              ...prev,
+              airTemperature:
+                prev.airTemperature !== ""
+                  ? prev.airTemperature
+                  : (temp_c ?? ""),
+              humidity: prev.humidity !== "" ? prev.humidity : (humidity ?? ""),
+              rainfall:
+                prev.rainfall !== "" ? prev.rainfall : (precip_mm ?? ""),
+            };
+            // onChange?.(next);
+            return next;
+          });
+        }
+      } catch (e: any) {
+        if (!cancelled) setErr(e.message ?? "failed to fetch weather");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchWeather();
+    return () => {
+      cancelled = true;
+    };
+  }, [fieldLocation]);
+
+  if (load) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-gray-50">
+        <div className="w-64 h-1 bg-gray-200 overflow-hidden relative rounded">
+          <div className="absolute left-0 top-0 h-full w-1/3 bg-emerald-500 animate-[slide_1.5s_linear_infinite]"></div>
+        </div>
+        <style>
+          {`
+      @keyframes slide {
+        0% { left: -33%; }
+        50% { left: 50%; }
+        100% { left: 100%; }
+      }
+    `}
+        </style>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Page header */}
@@ -176,7 +281,7 @@ export default function AddDayPage({
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               <h1 className="text-lg font-medium">
-                Field {fieldId} - Add Daywise Data
+                Add Daywise Data for Field - "{fieldName}"
               </h1>
             </div>
 
@@ -400,7 +505,7 @@ export default function AddDayPage({
                   <label className="block text-sm mb-2 items-center gap-2">
                     <ImageIcon className="w-4 h-4" /> Images
                   </label>
-                  
+
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
                     <div className="text-center">
                       <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
@@ -413,7 +518,7 @@ export default function AddDayPage({
                           className="flex items-center gap-2"
                         >
                           <Upload className="w-4 h-4" />
-                          {uploadingImages ? 'Uploading...' : 'Upload Images'}
+                          {uploadingImages ? "Uploading..." : "Upload Images"}
                         </Button>
                         <input
                           ref={fileInputRef}

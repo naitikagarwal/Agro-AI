@@ -13,7 +13,7 @@ import { LayoutDashboard } from "lucide-react";
 
 export default function Home() {
   const [userData, setUserData] = useState<any>(null);
-  const[loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUser() {

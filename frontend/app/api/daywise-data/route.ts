@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     if (!fieldId || !date) {
       return NextResponse.json(
         { error: "fieldId and date are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     if (existingEntry) {
       return NextResponse.json(
         { error: "Entry already exists for this date" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -88,7 +88,7 @@ export async function POST(req: Request) {
     console.error("Error creating daywise data:", error);
     return NextResponse.json(
       { error: "Failed to create daywise data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -101,7 +101,7 @@ export async function GET(req: Request) {
     if (!fieldId) {
       return NextResponse.json(
         { error: "fieldId is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -110,7 +110,7 @@ export async function GET(req: Request) {
       include: {
         images: true,
       },
-      orderBy: { date: 'desc' },
+      orderBy: { date: "desc" },
     });
 
     return NextResponse.json(data);
@@ -118,7 +118,7 @@ export async function GET(req: Request) {
     console.error("Error fetching daywise data:", error);
     return NextResponse.json(
       { error: "Failed to fetch daywise data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
