@@ -2,23 +2,16 @@ import { PrismaClient } from "@prisma/client";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 
-
-import db from "./db/db";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth from "next-auth";
-
 const prisma = new PrismaClient();
-const adapter = PrismaAdapter(db);
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter,
+export const authOptions = {
   providers: [
     Credentials({
       name: "Credentials",
       credentials: {
         username: {
           label: "Username",
-          type: "text"
+          type: "text",
         },
         password: { label: "Password", type: "password" },
       },
@@ -31,10 +24,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           console.log(
             "Searching for user with username:",
-            credentials.username
+            credentials.username,
           );
 
-          const user = await prisma.user.findFirst({
+          const user = await prisma.user.findUnique({
             where: {
               username: credentials.username,
             },
@@ -48,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log("User found, verifying password");
           const passwordMatch = await bcrypt.compare(
             credentials.password,
-            user.password
+            user.password,
           );
 
           if (!passwordMatch) {
@@ -93,4 +86,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-});
+};

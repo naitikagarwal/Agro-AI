@@ -16,4 +16,116 @@ model User {
   username     String       @unique
   email String        @unique
   password     String
+  Fields       Field[]
+}
+
+model Field {
+  id             Int             @id @default(autoincrement())
+  user           User            @relation(fields: [userId], references: [id])
+  userId         Int
+  name           String
+  location       String?
+  description    String?
+  daywiseData    DaywiseData[]
+  daywiseResults DaywiseResult[]
+  finalResults   FinalResult[]
+  createdAt      DateTime        @default(now())
+
+  @@index([userId])
+  @@unique([userId, name]) // optional: prevent two fields with same name per user
+}
+
+model DaywiseData {
+  id                 Int           @id @default(autoincrement())
+  field              Field         @relation(fields: [fieldId], references: [id])
+  fieldId            Int
+  date               DateTime      // store date (use midnight UTC or date-only)
+  images             DaywiseImage[]
+  soilMoisture       Float?        // e.g., volumetric water content (%) or m3/m3
+  soilTemperature    Float?        // °C
+  soilPH             Float?
+  nutrientN          Float?        // ppm or mg/kg
+  nutrientP          Float?
+  nutrientK          Float?
+  soilEC             Float?        // dS/m or µS/cm (document unit)
+  airTemperature     Float?        // °C
+  humidity           Float?        // % RH
+  rainfall           Float?        // mm (daily total)
+  leafWetness        Float?        // sensor units or scale
+  canopyTemperature  Float?        // °C
+  evapotranspiration Float?        // mm/day
+  solarPAR           Float?        // µmol/m²/s (or W/m²) — document units
+  notes              String?
+  createdAt          DateTime      @default(now())
+
+  @@unique([fieldId, date]) // ensure at most one entry per field per date
+  @@index([fieldId, date])
+}
+
+model DaywiseImage {
+  id           Int         @id @default(autoincrement())
+  daywiseData  DaywiseData @relation(fields: [daywiseDataId], references: [id])
+  daywiseDataId Int
+  url          String      // S3/Cloud URL or internal path
+  caption      String?
+  createdAt    DateTime    @default(now())
+
+  @@index([daywiseDataId])
+}
+
+model DaywiseResult {
+  id                       Int      @id @default(autoincrement())
+  field                    Field    @relation(fields: [fieldId], references: [id])
+  fieldId                  Int
+  date                     DateTime
+
+  // Outputs from LSTM
+  cropHealthScore          String?   // "Healthy" | "Stressed" | "At Risk"
+  soilMoistureForecast     Float?    // percentage or mm
+  pestRiskScore            Float?    // 0..1
+  anomalyDetected          Boolean?  // 0/1
+  riskMap                  Json?     // matrix of zones: { zoneId: "green/yellow/red" }
+
+  createdAt                DateTime @default(now())
+
+  @@unique([fieldId, date])
+  @@index([fieldId, date])
+}
+
+// model AnomalyDetection {
+//   id             Int      @id @default(autoincrement())
+//   field          Field    @relation(fields: [fieldId], references: [id])
+//   fieldId        Int
+//   date           DateTime
+//   anomalyType    String   // e.g., "Leaf Spot", "Water Stress"
+//   boundingBox    Json?    // coordinates of anomaly area (polygon or bbox)
+//   annotatedImage String?  // URL/path to anomaly-marked image
+//   severity       Float?   // optional score: 0..1
+//   createdAt      DateTime @default(now())
+
+//   @@index([fieldId, date])
+// }
+
+model FinalResult {
+  id                   Int      @id @default(autoincrement())
+  field                Field    @relation(fields: [fieldId], references: [id])
+  fieldId              Int
+  cycleName            String?  
+  startDate            DateTime
+  endDate              DateTime
+
+  // Aggregated averages
+  averageSoilMoisture  Float?
+  averageCanopyTemp    Float?
+  avgPlantStressScore  Float?
+  yieldEstimate        Float?
+
+  // Forecast summaries (optional, aggregated from DaywiseResults)
+  avgPestRiskScore     Float?
+  overallHealthStatus  String?  // "Healthy", "Stressed", "At Risk"
+
+  recommendations      String?  // free-text summary or JSON blob
+  createdAt            DateTime @default(now())
+
+  @@index([fieldId, cycleName])
 }
