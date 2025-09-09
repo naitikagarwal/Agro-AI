@@ -192,8 +192,8 @@ export default function Home() {
               </h4>
             </CardHeader>
             <CardContent>
-              Ingest sequences, align them with historical data, and extract
-              indices (NDVI, GNDVI, SAVI) and soil signatures for deep analysis.
+              Ingest HDR Image,extracts spctral bands and indices (NDVI, GNDVI,
+              SAVI) and soil signatures for deep analysis.
             </CardContent>
           </Card>
 

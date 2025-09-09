@@ -8,13 +8,13 @@ const historicalData = {
   recordedTo: "2025-09-08",
   soilMoisture: [12.72, 12.78, 11.93, 12.87, 12.48, 15.11, 12.53],
   ambientTemperature: [18.88, 18.68, 19.65, 19.13, 19.02, 18.21, 18.68],
-  humidity: [44.08, 42.78, 42.33, 44.79, 45.00, 42.43, 41.38],
+  humidity: [44.08, 42.78, 42.33, 44.79, 45.0, 42.43, 41.38],
   soilTemperature: [16.52, 16.57, 16.03, 17.03, 16.85, 15.66, 15.26],
-  chlorophyllContent: [21.02, 19.32, 23.82, 22.69, 23.49, 23.71, 25.00],
+  chlorophyllContent: [21.02, 19.32, 23.82, 22.69, 23.49, 23.71, 25.0],
   stressScore: [0.16, 0.16, 0.21, 0.14, 0.17, 0.14, 0.17],
-  anomalyDetected: [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+  anomalyDetected: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
   pestRiskScore: [0.25, 0.27, 0.26, 0.28, 0.29, 0.23, 0.23],
-  plantHealthStatus: "Moderately Stressed"
+  plantHealthStatus: "Moderately Stressed",
 };
 
 // Updated CNN data based on current conditions
@@ -85,14 +85,22 @@ const sampleLSTM = {
    Helper UI components
    ------------------------- */
 
-function Badge({ children, variant = "default" }: { children: React.ReactNode; variant?: "default" | "warning" | "danger" }) {
+function Badge({
+  children,
+  variant = "default",
+}: {
+  children: React.ReactNode;
+  variant?: "default" | "warning" | "danger";
+}) {
   const colors = {
     default: "bg-emerald-100 text-emerald-800",
     warning: "bg-yellow-100 text-yellow-800",
-    danger: "bg-red-100 text-red-800"
+    danger: "bg-red-100 text-red-800",
   };
   return (
-    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${colors[variant]}`}>
+    <span
+      className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${colors[variant]}`}
+    >
       {children}
     </span>
   );
@@ -112,8 +120,10 @@ function SmallStat({
       <div className="text-xs text-slate-600 flex items-center justify-between">
         {label}
         {trend && (
-          <span className={`text-xs ${trend === 'up' ? 'text-green-600' : trend === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
-            {trend === 'up' ? '↗' : trend === 'down' ? '↘' : '→'}
+          <span
+            className={`text-xs ${trend === "up" ? "text-green-600" : trend === "down" ? "text-red-600" : "text-gray-600"}`}
+          >
+            {trend === "up" ? "↗" : trend === "down" ? "↘" : "→"}
           </span>
         )}
       </div>
@@ -137,24 +147,33 @@ function anomalyColor(type: string) {
   }
 }
 
-function MiniChart({ data, label, unit = "" }: { data: number[]; label: string; unit?: string }) {
+function MiniChart({
+  data,
+  label,
+  unit = "",
+}: {
+  data: number[];
+  label: string;
+  unit?: string;
+}) {
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
   const width = 120;
   const height = 40;
 
-  const points = data.map((value, i) => {
-    const x = (i / (data.length - 1)) * width;
-    const y = height - ((value - min) / range) * height;
-    return `${x},${y}`;
-  }).join(' ');
+  const points = data
+    .map((value, i) => {
+      const x = (i / (data.length - 1)) * width;
+      const y = height - ((value - min) / range) * height;
+      return `${x},${y}`;
+    })
+    .join(" ");
 
   return (
     <div className="bg-white p-3 rounded-lg shadow-sm border border-emerald-50">
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-slate-700">{label}</span>
-        <span className="text-xs text-slate-500">{data[data.length - 1]}{unit}</span>
       </div>
       <svg width={width} height={height} className="w-full">
         <polyline
@@ -163,7 +182,12 @@ function MiniChart({ data, label, unit = "" }: { data: number[]; label: string; 
           strokeWidth="2"
           points={points}
         />
-        <circle cx={width} cy={height - ((data[data.length - 1] - min) / range) * height} r="3" fill="#10B981" />
+        <circle
+          cx={width}
+          cy={height - ((data[data.length - 1] - min) / range) * height}
+          r="3"
+          fill="#10B981"
+        />
       </svg>
       <div className="text-xs text-slate-500 mt-1">
         Range: {min.toFixed(1)} - {max.toFixed(1)}
@@ -182,11 +206,7 @@ function AnomalyMapImage({
 }) {
   return (
     <div className="rounded-lg overflow-hidden border border-emerald-100 shadow-sm bg-white">
-      <img
-        src={src}
-        alt="Field annotated"
-        className="w-full h-auto block"
-      />
+      <img src={src} alt="Field annotated" className="w-full h-auto block" />
       <div className="px-3 py-2 flex items-center justify-between bg-emerald-50">
         <div className="text-sm text-slate-700">Field image (annotated)</div>
         <div className="text-xs text-slate-500">Annotated: {annotatedAt}</div>
@@ -194,7 +214,6 @@ function AnomalyMapImage({
     </div>
   );
 }
-
 
 function RiskMapGrid({ matrix }: { matrix: number[][] }) {
   const rows = matrix.length;
@@ -220,8 +239,7 @@ function RiskMapGrid({ matrix }: { matrix: number[][] }) {
               className="flex items-center justify-center text-xs font-medium rounded"
               style={{ width: size, height: size, background: colorFor(cell) }}
               title={labelFor(cell)}
-            >
-            </div>
+            ></div>
           )),
         )}
       </div>
@@ -246,8 +264,10 @@ export default function ReportPage() {
   const historical = historicalData;
 
   // Calculate trends
-  const getAverage = (arr: number[]) => arr.reduce((a, b) => a + b) / arr.length;
-  const currentStress = historical.stressScore[historical.stressScore.length - 1];
+  const getAverage = (arr: number[]) =>
+    arr.reduce((a, b) => a + b) / arr.length;
+  const currentStress =
+    historical.stressScore[historical.stressScore.length - 1];
   const avgStress = getAverage(historical.stressScore);
 
   return (
@@ -259,11 +279,18 @@ export default function ReportPage() {
               AgroAI - Field Report
             </h1>
             <p className="text-sm text-slate-600 mt-1">
-              Historical trends & future predictions • Plant Health: {historical.plantHealthStatus}
+              Historical trends & future predictions • Plant Health:{" "}
+              {historical.plantHealthStatus}
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Badge variant={historical.plantHealthStatus.includes("Stressed") ? "warning" : "default"}>
+            <Badge
+              variant={
+                historical.plantHealthStatus.includes("Stressed")
+                  ? "warning"
+                  : "default"
+              }
+            >
               {historical.plantHealthStatus}
             </Badge>
             <button className="px-3 py-2 rounded-md bg-emerald-600 text-white text-sm font-medium shadow-sm">
@@ -286,7 +313,9 @@ export default function ReportPage() {
           />
           <SmallStat
             label="Chlorophyll Content"
-            value={historical.chlorophyllContent[historical.chlorophyllContent.length - 1].toFixed(1)}
+            value={historical.chlorophyllContent[
+              historical.chlorophyllContent.length - 1
+            ].toFixed(1)}
             trend="up"
           />
           <SmallStat
@@ -296,15 +325,21 @@ export default function ReportPage() {
           />
           <SmallStat
             label="Anomalies Detected"
-            value={historical.anomalyDetected.reduce((a, b) => a + b, 0) === 0 ? "None" : "Present"}
+            value={
+              historical.anomalyDetected.reduce((a, b) => a + b, 0) === 0
+                ? "None"
+                : "Present"
+            }
           />
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left: Annotated image + anomalies list */}
           <div className="lg:col-span-2 space-y-4">
-            <AnomalyMapImage src="/Anomalies-report.jpg" annotatedAt={sampleCNN.annotatedAt} />
-
+            <AnomalyMapImage
+              src="/Anomalies-report.jpg"
+              annotatedAt={sampleCNN.annotatedAt}
+            />
 
             <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50">
               <h3 className="font-semibold text-emerald-800">
@@ -343,20 +378,43 @@ export default function ReportPage() {
 
           {/* Right column: LSTM forecasts */}
           <aside className="space-y-4">
-            
-            <h2 className="text-xl font-bold text-emerald-900 mb-4">7-Day Historical Trends</h2>
+            <h2 className="text-xl font-bold text-emerald-900 mb-4">
+              7-Day Historical Trends
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-              <MiniChart data={historical.soilMoisture} label="Soil Moisture" unit="%" />
-              <MiniChart data={historical.ambientTemperature} label="Temperature" unit="°C" />
+              <MiniChart
+                data={historical.soilMoisture}
+                label="Soil Moisture"
+                unit="%"
+              />
+              <MiniChart
+                data={historical.ambientTemperature}
+                label="Temperature"
+                unit="°C"
+              />
               <MiniChart data={historical.humidity} label="Humidity" unit="%" />
-              <MiniChart data={historical.chlorophyllContent} label="Chlorophyll" />
+              <MiniChart
+                data={historical.chlorophyllContent}
+                label="Chlorophyll"
+              />
               <MiniChart data={historical.stressScore} label="Stress Score" />
-              <MiniChart data={historical.pestRiskScore.map(x => x * 100)} label="Pest Risk" unit="%" />
-              <MiniChart data={historical.soilTemperature} label="Soil Temp" unit="°C" />
+              <MiniChart
+                data={historical.pestRiskScore.map((x) => x * 100)}
+                label="Pest Risk"
+                unit="%"
+              />
+              <MiniChart
+                data={historical.soilTemperature}
+                label="Soil Temp"
+                unit="°C"
+              />
               <div className="bg-white p-3 rounded-lg shadow-sm border border-emerald-50">
-                <div className="text-sm font-medium text-slate-700 mb-2">Data Period</div>
+                <div className="text-sm font-medium text-slate-700 mb-2">
+                  Data Period
+                </div>
                 <div className="text-xs text-slate-600">
-                  From: {historical.recordedFrom}<br />
+                  From: {historical.recordedFrom}
+                  <br />
                   To: {historical.recordedTo}
                 </div>
                 <div className="mt-2 text-xs text-emerald-600 font-medium">
@@ -371,7 +429,10 @@ export default function ReportPage() {
               {cnn.anomalies.length > 0 ? (
                 <div className="grid gap-3">
                   {cnn.anomalies.map((a) => (
-                    <div key={a.id} className="flex items-center justify-between">
+                    <div
+                      key={a.id}
+                      className="flex items-center justify-between"
+                    >
                       <div className="flex items-center gap-3">
                         <div
                           className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
@@ -382,8 +443,9 @@ export default function ReportPage() {
                         <div>
                           <div className="text-sm font-semibold">{a.type}</div>
                           <div className="text-xs text-slate-500">
-                            Location: ({(a.x * 100).toFixed(0)}%, {(a.y * 100).toFixed(0)}%) •
-                            Confidence: {(a.confidence * 100).toFixed(0)}%
+                            Location: ({(a.x * 100).toFixed(0)}%,{" "}
+                            {(a.y * 100).toFixed(0)}%) • Confidence:{" "}
+                            {(a.confidence * 100).toFixed(0)}%
                           </div>
                         </div>
                       </div>
@@ -395,28 +457,32 @@ export default function ReportPage() {
                 </div>
               ) : (
                 <div className="text-center py-4 text-slate-500">
-                  <div className="text-sm">✓ No critical anomalies detected in recent scans</div>
-                  <div className="text-xs mt-1">Continue regular monitoring</div>
+                  <div className="text-sm">
+                    ✓ No critical anomalies detected in recent scans
+                  </div>
+                  <div className="text-xs mt-1">
+                    Continue regular monitoring
+                  </div>
                 </div>
               )}
             </div>
-
           </aside>
-
         </div>
 
         <footer className="mt-8 p-4 bg-white/50 backdrop-blur rounded-lg text-sm text-slate-600">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <strong>Data Summary:</strong> Analysis based on 7 days of sensor readings
-              ({historical.recordedFrom} to {historical.recordedTo}). Current plant health
-              status shows {historical.plantHealthStatus.toLowerCase()} condition with
+              <strong>Data Summary:</strong> Analysis based on 7 days of sensor
+              readings ({historical.recordedFrom} to {historical.recordedTo}).
+              Current plant health status shows{" "}
+              {historical.plantHealthStatus.toLowerCase()} condition with
               average stress score of {avgStress.toFixed(2)}.
             </div>
             <div>
-              <strong>Recommendations:</strong> Monitor soil moisture levels closely,
-              maintain current pest management protocols, and consider nutrient
-              supplementation for stressed areas identified in the field scan.
+              <strong>Recommendations:</strong> Monitor soil moisture levels
+              closely, maintain current pest management protocols, and consider
+              nutrient supplementation for stressed areas identified in the
+              field scan.
             </div>
           </div>
         </footer>
