@@ -143,7 +143,7 @@ function MiniChart({ data, label, unit = "" }: { data: number[]; label: string; 
   const range = max - min || 1;
   const width = 120;
   const height = 40;
-  
+
   const points = data.map((value, i) => {
     const x = (i / (data.length - 1)) * width;
     const y = height - ((value - min) / range) * height;
@@ -173,77 +173,28 @@ function MiniChart({ data, label, unit = "" }: { data: number[]; label: string; 
 }
 
 /* Render an SVG field image and place markers */
-function AnomalyMap({
-  width = 800,
-  height = 500,
-  anomalies,
+function AnomalyMapImage({
+  src,
+  annotatedAt,
 }: {
-  width?: number;
-  height?: number;
-  anomalies: (typeof sampleCNN.anomalies)[number][];
+  src: string;
+  annotatedAt: string;
 }) {
   return (
     <div className="rounded-lg overflow-hidden border border-emerald-100 shadow-sm bg-white">
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full block">
-        <defs>
-          <linearGradient id="gfield" x1="0" x2="1">
-            <stop offset="0" stopColor="#E9F7EF" />
-            <stop offset="1" stopColor="#DFF3E6" />
-          </linearGradient>
-        </defs>
-        <rect x="0" y="0" width={width} height={height} fill="url(#gfield)" />
-        {Array.from({ length: 12 }).map((_, i) => (
-          <rect
-            key={i}
-            x={20}
-            y={(i / 12) * height + 6}
-            width={width - 40}
-            height={6}
-            fill={i % 2 === 0 ? "#EAF8F0" : "#DFF3E6"}
-            rx={3}
-          />
-        ))}
-
-        {anomalies.map((a) => {
-          const cx = a.x * width;
-          const cy = a.y * height;
-          const color = anomalyColor(a.type);
-          return (
-            <g
-              key={a.id}
-              transform={`translate(${cx}, ${cy})`}
-              className="cursor-pointer"
-            >
-              <circle
-                r={18}
-                fill={color}
-                fillOpacity={0.18}
-                stroke={color}
-                strokeWidth={2}
-              />
-              <text
-                x={0}
-                y={6}
-                textAnchor="middle"
-                fontSize={10}
-                fontWeight={700}
-                fill={color}
-              >
-                {a.type[0]}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
+      <img
+        src={src}
+        alt="Field annotated"
+        className="w-full h-auto block"
+      />
       <div className="px-3 py-2 flex items-center justify-between bg-emerald-50">
         <div className="text-sm text-slate-700">Field image (annotated)</div>
-        <div className="text-xs text-slate-500">
-          Annotated: {sampleCNN.annotatedAt}
-        </div>
+        <div className="text-xs text-slate-500">Annotated: {annotatedAt}</div>
       </div>
     </div>
   );
 }
+
 
 function RiskMapGrid({ matrix }: { matrix: number[][] }) {
   const rows = matrix.length;
@@ -300,7 +251,7 @@ export default function ReportPage() {
   const avgStress = getAverage(historical.stressScore);
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-emerald-50 to-green-100">
+    <div className="min-h-screen p-6 bg-white">
       <div className="max-w-7xl mx-auto">
         <header className="flex items-center justify-between mb-6">
           <div>
@@ -349,39 +300,70 @@ export default function ReportPage() {
           />
         </section>
 
-        {/* Historical Trends */}
-        <section className="mb-6">
-          <h2 className="text-xl font-bold text-emerald-900 mb-4">7-Day Historical Trends</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MiniChart data={historical.soilMoisture} label="Soil Moisture" unit="%" />
-            <MiniChart data={historical.ambientTemperature} label="Temperature" unit="°C" />
-            <MiniChart data={historical.humidity} label="Humidity" unit="%" />
-            <MiniChart data={historical.chlorophyllContent} label="Chlorophyll" />
-            <MiniChart data={historical.stressScore} label="Stress Score" />
-            <MiniChart data={historical.pestRiskScore.map(x => x * 100)} label="Pest Risk" unit="%" />
-            <MiniChart data={historical.soilTemperature} label="Soil Temp" unit="°C" />
-            <div className="bg-white p-3 rounded-lg shadow-sm border border-emerald-50">
-              <div className="text-sm font-medium text-slate-700 mb-2">Data Period</div>
-              <div className="text-xs text-slate-600">
-                From: {historical.recordedFrom}<br/>
-                To: {historical.recordedTo}
-              </div>
-              <div className="mt-2 text-xs text-emerald-600 font-medium">
-                ✓ 7 days of clean data
-              </div>
-            </div>
-          </div>
-        </section>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left: Annotated image + anomalies list */}
           <div className="lg:col-span-2 space-y-4">
-            <AnomalyMap
-              width={sampleCNN.imageSize.width}
-              height={sampleCNN.imageSize.height}
-              anomalies={cnn.anomalies}
-            />
+            <AnomalyMapImage src="/Anomalies-report.jpg" annotatedAt={sampleCNN.annotatedAt} />
 
+
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50">
+              <h3 className="font-semibold text-emerald-800">
+                LSTM Future Predictions
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Based on 7-day historical sensor data and growth patterns.
+              </p>
+
+              {/* Images */}
+              <div className="mt-4 space-y-3">
+                <div>
+                  <h4 className="text-sm font-medium text-slate-700">
+                    Disease Risk Index vs Day
+                  </h4>
+                  <img
+                    src="/disease.png"
+                    alt="Disease Risk Index vs Day"
+                    className="rounded-lg border border-slate-100 mt-1"
+                  />
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-medium text-slate-700">
+                    Risk Index vs Day
+                  </h4>
+                  <img
+                    src="/insects.png"
+                    alt="Risk Index vs Day"
+                    className="rounded-lg border border-slate-100 mt-1"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right column: LSTM forecasts */}
+          <aside className="space-y-4">
+            
+            <h2 className="text-xl font-bold text-emerald-900 mb-4">7-Day Historical Trends</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+              <MiniChart data={historical.soilMoisture} label="Soil Moisture" unit="%" />
+              <MiniChart data={historical.ambientTemperature} label="Temperature" unit="°C" />
+              <MiniChart data={historical.humidity} label="Humidity" unit="%" />
+              <MiniChart data={historical.chlorophyllContent} label="Chlorophyll" />
+              <MiniChart data={historical.stressScore} label="Stress Score" />
+              <MiniChart data={historical.pestRiskScore.map(x => x * 100)} label="Pest Risk" unit="%" />
+              <MiniChart data={historical.soilTemperature} label="Soil Temp" unit="°C" />
+              <div className="bg-white p-3 rounded-lg shadow-sm border border-emerald-50">
+                <div className="text-sm font-medium text-slate-700 mb-2">Data Period</div>
+                <div className="text-xs text-slate-600">
+                  From: {historical.recordedFrom}<br />
+                  To: {historical.recordedTo}
+                </div>
+                <div className="mt-2 text-xs text-emerald-600 font-medium">
+                  ✓ 7 days of clean data
+                </div>
+              </div>
+            </div>
             <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50">
               <h2 className="font-semibold text-lg text-emerald-800 mb-3">
                 Current Field Analysis
@@ -400,7 +382,7 @@ export default function ReportPage() {
                         <div>
                           <div className="text-sm font-semibold">{a.type}</div>
                           <div className="text-xs text-slate-500">
-                            Location: ({(a.x * 100).toFixed(0)}%, {(a.y * 100).toFixed(0)}%) • 
+                            Location: ({(a.x * 100).toFixed(0)}%, {(a.y * 100).toFixed(0)}%) •
                             Confidence: {(a.confidence * 100).toFixed(0)}%
                           </div>
                         </div>
@@ -418,83 +400,22 @@ export default function ReportPage() {
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Right column: LSTM forecasts */}
-          <aside className="space-y-4">
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50">
-              <h3 className="font-semibold text-emerald-800">
-                LSTM Future Predictions
-              </h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Based on 7-day historical sensor data and growth patterns.
-              </p>
-            </div>
-
-            {lstm.forecasts.map((f) => (
-              <div
-                key={f.day}
-                className="bg-white p-4 rounded-lg shadow-sm border border-emerald-50"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <div className="text-sm font-semibold">{f.day}</div>
-                    <div className="text-xs text-slate-500">
-                      Status: <span className="font-medium">{f.CropHealthScore}</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-semibold">
-                      {(f.CropHealthNumeric * 100).toFixed(0)}%
-                    </div>
-                    <div className="text-xs text-slate-500">Health score</div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <div className="rounded p-2 bg-emerald-50">
-                    <div className="text-xs text-slate-600">Soil moisture</div>
-                    <div className="text-lg font-semibold">
-                      {f.SoilMoistureForecast.mm} mm ({f.SoilMoistureForecast.pct}%)
-                    </div>
-                  </div>
-                  <div className="rounded p-2 bg-emerald-50">
-                    <div className="text-xs text-slate-600">Pest risk</div>
-                    <div className="text-lg font-semibold">
-                      {(f.PestRiskScore * 100).toFixed(0)}%
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-2">
-                  <div className="text-xs text-slate-600 mb-2">Risk distribution map</div>
-                  <RiskMapGrid matrix={f.RiskMap} />
-                </div>
-
-                <div className="mt-3 text-xs text-slate-600 flex items-center justify-between">
-                  <div>
-                    Anomaly prediction: 
-                    <span className="font-medium ml-1">
-                      {f.AnomalyDetected ? "Possible" : "Low risk"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
           </aside>
+
         </div>
 
         <footer className="mt-8 p-4 bg-white/50 backdrop-blur rounded-lg text-sm text-slate-600">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <strong>Data Summary:</strong> Analysis based on 7 days of sensor readings 
-              ({historical.recordedFrom} to {historical.recordedTo}). Current plant health 
-              status shows {historical.plantHealthStatus.toLowerCase()} condition with 
+              <strong>Data Summary:</strong> Analysis based on 7 days of sensor readings
+              ({historical.recordedFrom} to {historical.recordedTo}). Current plant health
+              status shows {historical.plantHealthStatus.toLowerCase()} condition with
               average stress score of {avgStress.toFixed(2)}.
             </div>
             <div>
-              <strong>Recommendations:</strong> Monitor soil moisture levels closely, 
-              maintain current pest management protocols, and consider nutrient 
+              <strong>Recommendations:</strong> Monitor soil moisture levels closely,
+              maintain current pest management protocols, and consider nutrient
               supplementation for stressed areas identified in the field scan.
             </div>
           </div>
